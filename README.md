@@ -2,7 +2,7 @@
 
 A compact, original Linux desktop project built around a black-hole identity, a minimal Wayland session and a future mobile-to-desktop architecture.
 
-> **Current milestone:** build and validate the first bootable amd64 live ISO. No APK or EXE launcher is being developed in this phase.
+> **Current milestone:** the amd64 live ISO builds successfully. Companion launchers are being developed to boot that exact ISO in a virtual machine: Windows first, Android native-QEMU integration next. The ISO still needs real-device boot testing.
 
 ## Visual identity
 
