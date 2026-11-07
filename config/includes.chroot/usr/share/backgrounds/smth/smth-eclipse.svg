@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
 <rect width="1920" height="1080" fill="#000000"/>
 <g fill="none" stroke-width="3">
- <ellipse cx="960" cy="450" rx="390" ry="142" stroke="#FF315A" transform="rotate(-14 960 450)"/>
- <ellipse cx="960" cy="450" rx="315" ry="115" stroke="#20D9C2" transform="rotate(-14 960 450)"/>
+ <ellipse cx="960" cy="450" rx="390" ry="142" stroke="#A56EFF" transform="rotate(-14 960 450)"/>
+ <ellipse cx="960" cy="450" rx="315" ry="115" stroke="#C8F169" transform="rotate(-14 960 450)"/>
 </g>
 <circle cx="960" cy="450" r="116" fill="#000000" stroke="#FFFFFF" stroke-width="2"/>
-<g fill="#FF315A"><circle cx="520" cy="356" r="5"/><circle cx="552" cy="330" r="3"/><circle cx="588" cy="306" r="4"/><circle cx="702" cy="250" r="3"/><circle cx="1262" cy="641" r="4"/></g>
-<g fill="#20D9C2"><circle cx="1328" cy="548" r="5"/><circle cx="1362" cy="574" r="3"/><circle cx="1397" cy="599" r="4"/><circle cx="1215" cy="680" r="3"/><circle cx="660" cy="610" r="4"/></g>
+<g fill="#A56EFF"><circle cx="520" cy="356" r="5"/><circle cx="552" cy="330" r="3"/><circle cx="588" cy="306" r="4"/><circle cx="702" cy="250" r="3"/><circle cx="1262" cy="641" r="4"/></g>
+<g fill="#C8F169"><circle cx="1328" cy="548" r="5"/><circle cx="1362" cy="574" r="3"/><circle cx="1397" cy="599" r="4"/><circle cx="1215" cy="680" r="3"/><circle cx="660" cy="610" r="4"/></g>
 <g fill="#FFFFFF" font-family="Inter,Arial,sans-serif" text-anchor="middle">
  <text x="960" y="850" font-size="46" font-weight="700" letter-spacing="24">SMTH</text>
  <text x="960" y="900" font-size="13" letter-spacing="8">SYSTEM READY</text>
