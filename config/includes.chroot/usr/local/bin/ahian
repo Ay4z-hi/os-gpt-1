@@ -1,26 +1,31 @@
 #!/bin/sh
 set -eu
 MODE="${1:-toggle}"
-CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/smth"
-STATE="$CONFIG/ahian.enabled"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+SMTH_CONFIG="$CONFIG/smth"
+STATE="$SMTH_CONFIG/ahian.enabled"
 WALL_NORMAL=/usr/share/backgrounds/smth/smth-eclipse.svg
 WALL_AHIAN=/usr/share/backgrounds/smth/smth-ahian.svg
-mkdir -p "$CONFIG"
+mkdir -p "$SMTH_CONFIG" "$CONFIG/waybar" "$CONFIG/wofi"
 enable_mode() {
   : > "$STATE"
+  cp /usr/share/smth/ahian-wofi.css "$CONFIG/wofi/style.css"
   swaymsg "output * bg $WALL_AHIAN fill" >/dev/null 2>&1 || true
   swaymsg "gaps inner 14" >/dev/null 2>&1 || true
   swaymsg "gaps outer 14" >/dev/null 2>&1 || true
   swaymsg "default_border pixel 3" >/dev/null 2>&1 || true
+  swaymsg "client.focused #20D9C2 #000000 #FFFFFF #FF315A #20D9C2" >/dev/null 2>&1 || true
   pkill -USR2 waybar 2>/dev/null || true
   notify-send "SMTH / AHIAN" "Visual mode activated" 2>/dev/null || true
 }
 disable_mode() {
   rm -f "$STATE"
+  cp /etc/skel/.config/wofi/style.css "$CONFIG/wofi/style.css"
   swaymsg "output * bg $WALL_NORMAL fill" >/dev/null 2>&1 || true
   swaymsg "gaps inner 8" >/dev/null 2>&1 || true
   swaymsg "gaps outer 8" >/dev/null 2>&1 || true
   swaymsg "default_border pixel 2" >/dev/null 2>&1 || true
+  swaymsg "client.focused #FF315A #000000 #FFFFFF #20D9C2 #FF315A" >/dev/null 2>&1 || true
   pkill -USR2 waybar 2>/dev/null || true
   notify-send "SMTH" "AHIAN mode deactivated" 2>/dev/null || true
 }
