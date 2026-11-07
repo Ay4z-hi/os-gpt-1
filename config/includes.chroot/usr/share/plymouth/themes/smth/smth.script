@@ -1,0 +1,19 @@
+Window.SetBackgroundTopColor(0, 0, 0);
+Window.SetBackgroundBottomColor(0, 0, 0);
+logo_image = Image.Text("SMTH", "Sans Bold 34", "FFFFFF");
+logo_sprite = Sprite(logo_image);
+coral_image = Image.Text("●", "Sans 18", "FF315A");
+coral_sprite = Sprite(coral_image);
+teal_image = Image.Text("●", "Sans 18", "20D9C2");
+teal_sprite = Sprite(teal_image);
+fun refresh_callback() {
+  w = Window.GetWidth();
+  h = Window.GetHeight();
+  logo_sprite.SetX(w / 2 - logo_image.GetWidth() / 2);
+  logo_sprite.SetY(h / 2 - logo_image.GetHeight() / 2);
+  coral_sprite.SetX(w / 2 + 76);
+  coral_sprite.SetY(h / 2 + 3);
+  teal_sprite.SetX(w / 2 + 92);
+  teal_sprite.SetY(h / 2 + 3);
+}
+Plymouth.SetRefreshFunction(refresh_callback);
