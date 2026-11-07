@@ -7,7 +7,7 @@ A compact, original Linux desktop project built around a black-hole identity, a 
 ## Visual identity
 
 - Black and white UI
-- Exactly two accent colours: coral `#FF315A` and teal `#20D9C2`
+- Exactly two accent colours: violet `#A56EFF` and lime `#C8F169`
 - Flat dot patterns and an original eclipse / black-hole mark
 - No gradients, glow shading or copied Nothing OS glyphs
 
