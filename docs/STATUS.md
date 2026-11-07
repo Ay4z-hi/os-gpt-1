@@ -1,32 +1,33 @@
-# Implementation status
+# SMTH OS implementation status
 
-This repository contains an initial Debian Live-Build desktop foundation.
+## Current target
 
-## Present in source
+A compact, bootable **amd64 live desktop ISO**. No Android APK or Windows EXE launcher work is in scope right now.
 
-- amd64 live-build configuration and package list
-- Sway Wayland session, Waybar panel, Wofi launcher, Foot terminal
-- SMTH Files launcher backed by Thunar, including desktop shortcut
-- SMTH Web launcher backed by Firefox ESR, including desktop shortcut
-- SMTH Settings menu for display, network, Bluetooth, sound, and session controls
-- SMTH App Installer shortcut for installing packages from signed Debian repositories
-- NetworkManager and BlueZ packages for Wi-Fi/Ethernet and Bluetooth
-- PipeWire/WirePlumber audio stack and Mako notification daemon
-- Custom black-hole/eclipse SVG logo and wallpaper; only coral and teal accent dots
-- Plymouth script theme prototype for a minimal SMTH boot screen
-- ahian command prototype that switches Waybar styling and reloads it
-- APT package install wrapper with package-name validation
-- Manual GitHub Actions ISO build workflow
+## Added to source
 
-## Not implemented or not validated yet
+- Sway Wayland session with Waybar panel and Wofi start menu
+- Custom black/white desktop styling with exactly two accent colours: coral `#FF315A` and teal `#20D9C2`
+- Custom SVG black-hole/eclipse wallpapers and icon theme
+- `ahian` command: toggles an alternate wallpaper, larger window spacing, stronger borders and animated Waybar accent
+- Custom Plymouth loading screen with SMTH wordmark and progress indicator
+- Bootloader preparation script that replaces Debian-labelled boot artwork/menu text with SMTH artwork
+- Thunar-based SMTH Files and Firefox ESR-based SMTH Web
+- Settings menu for display, network, Bluetooth, sound and session controls
+- NetworkManager, BlueZ, PipeWire/WirePlumber and Mako
+- APT package installer wrapper
+- Firmware for common Wi-Fi, graphics and audio devices
+- zram support and a trimmed package list
+- GitHub Actions workflow for building and uploading the live ISO
 
-- A successful ISO build and boot test; CI must be run and the artifact tested
-- Custom native file manager or browser engines; current launchers use Thunar and Firefox ESR
-- Custom GRUB menu theme; only the Plymouth splash prototype is included
+## Not yet verified / future work
+
+- A successful clean ISO build and QEMU boot test
+- Physical hardware tests for Wi-Fi, Bluetooth, graphics, audio, suspend and brightness
+- A dedicated graphical login screen; the first image auto-starts the SMTH session
+- Custom native applications and a true integrated Control Center
 - WinTabs compositor/window grouping
-- Mobile launcher APK, Android HAL, GSI, or device-specific ARM64 image
-- CoreLink, camera/gallery/paint apps, VM manager, and full settings/control-center GUI
-- Production-grade installer, secure user provisioning, signed SMTH package repository
-- Hardware validation for graphics, Wi-Fi, Bluetooth, audio, suspend, and power management
+- ARM64 device images, Android runtime, CoreLink and mobile continuity
+- Installer for installing SMTH onto a PC drive
 
-Do not describe this project as a finished operating system until the ISO boots and the major hardware paths are tested.
+Do not call the ISO complete until CI succeeds and the image boots in QEMU.
