@@ -7,7 +7,7 @@ class Home extends StatefulWidget { const Home({super.key}); @override State<Hom
 class _HomeState extends State<Home>{
  bool ahian=false,wifi=true,bluetooth=false,notice=false;
  final lines=<String>['SMTH Terminal 1.0','Type help to see commands.'];
- final apps=< (String,IconData) >[('Files',Icons.folder_open),('Browser',Icons.language),('Terminal',Icons.terminal),('Settings',Icons.tune),('Store',Icons.grid_view),('About',Icons.blur_circular)];
+ final apps = <(String, IconData)>[('Files',Icons.folder_open),('Browser',Icons.language),('Terminal',Icons.terminal),('Settings',Icons.tune),('Store',Icons.grid_view),('About',Icons.blur_circular)];
  void open(String n){ if(n=='About'){showDialog(context:context,builder:(_)=>const About());return;}
  showDialog(context:context,barrierColor:Colors.black54,builder:(_)=>AppWindow(name:n,wifi:wifi,bluetooth:bluetooth,onWifi:(v)=>setState(()=>wifi=v),onBluetooth:(v)=>setState(()=>bluetooth=v),lines:lines,onCommand:(s){setState((){lines.add('> '+s);switch(s.trim().toLowerCase()){case 'help':lines.add('help  neofetch  ahian  clear  date  ls');break;case 'neofetch':lines.add('SMTH OS • visual preview • AHian '+(ahian?'on':'off'));break;case 'ahian':ahian=!ahian;lines.add('AHIAN mode toggled.');break;case 'clear':lines.clear();break;case 'date':lines.add(DateTime.now().toString());break;case 'ls':lines.add('Documents/ Downloads/ Pictures/ notes.txt');break;case '':break;default:lines.add('Command not found. Try help.');}});}));
  }
