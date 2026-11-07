@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+package=$(printf '' | wofi --dmenu --prompt 'Install package from signed APT repositories')
+[ -n "$package" ] || exit 0
+case "$package" in
+  -*|*[!a-zA-Z0-9.+-]*) notify-send "SMTH Installer" "Invalid package name"; exit 2 ;;
+esac
+exec foot -e smth-install "$package"
