@@ -7,11 +7,11 @@ lb config noauto \
   --binary-images iso-hybrid \
   --bootloaders "grub-efi grub-pc" \
   --debian-installer none \
-  --archive-areas "main contrib non-free-firmware" \
+  --archive-areas "main contrib non-free non-free-firmware" \
   --apt-recommends false \
   --apt-options "--yes -oAcquire::Retries=3" \
-  --iso-application "SMTH OS" \
+  --iso-application "SMTH OS Live" \
   --iso-publisher "SMTH Project" \
   --iso-volume "SMTH_OS" \
-  --bootappend-live "boot=live components quiet splash username=smth hostname=smth-os" \
+  --bootappend-live "boot=live components quiet splash loglevel=3 systemd.show_status=false rd.udev.log_level=3 vt.global_cursor_default=0 logo.nologo username=smth hostname=smth-os" \
   "${@}"
