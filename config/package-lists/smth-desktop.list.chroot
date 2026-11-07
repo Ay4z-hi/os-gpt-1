@@ -1,4 +1,5 @@
-# SMTH OS minimal Wayland desktop foundation
+# SMTH OS: compact Wayland desktop
+# Core session and shell
 sway
 swaybg
 swayidle
@@ -6,39 +7,48 @@ swaylock
 waybar
 wofi
 foot
+# Everyday apps
 thunar
-thunar-archive-plugin
 firefox-esr
+# Hardware and system integration
 network-manager
 network-manager-gnome
 nm-connection-editor
 bluez
 blueman
+udisks2
+gvfs
+gvfs-backends
+# Audio and notifications
 pipewire
 pipewire-audio
 wireplumber
 pavucontrol
 mako-notifier
 libnotify-bin
+# Display and firmware
 brightnessctl
 wdisplays
 xwayland
-dbus-user-session
+firmware-linux-free
+firmware-misc-nonfree
+firmware-iwlwifi
+firmware-realtek
+firmware-atheros
+firmware-brcm80211
+firmware-amd-graphics
+firmware-sof-signed
+intel-microcode
+amd64-microcode
+# Boot, permissions, fonts, low-memory support
 greetd
 polkitd
 policykit-1-gnome
-udisks2
-gvfs
-gvfs-backends
-file-roller
 plymouth
 plymouth-themes
 librsvg2-common
 fonts-inter
 fonts-dejavu-core
-curl
-ca-certificates
+zram-tools
 sudo
-zsh
-git
-flatpak
+ca-certificates
