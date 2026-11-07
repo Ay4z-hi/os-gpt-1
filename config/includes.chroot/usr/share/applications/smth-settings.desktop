@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SMTH Settings
+Comment=Display, network, Bluetooth and sound controls
+Exec=smth-settings
+Icon=smth-mark
+Terminal=false
+Categories=Settings;System;
