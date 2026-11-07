@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SMTH Files
+Comment=Tabbed file management
+Exec=thunar
+Icon=system-file-manager
+Terminal=false
+Categories=System;FileTools;FileManager;
