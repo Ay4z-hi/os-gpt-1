@@ -30,4 +30,6 @@ QEMU/KVM, Box64, and FEX are optional, architecture-specific tools. No launcher 
 
 ## Visual system
 
-The interface uses black, white, and graphite surfaces. The only dot/accent colours are coral `#FF315A` and teal `#20D9C2`. The logo is an original eclipse/black-hole motif and the visible wordmark is only `SMTH`.
+The interface uses pure black and white surfaces. Dot/accent colours are limited to coral `#FF315A` and teal `#20D9C2`; no gradients or shaded dot colours are used. The logo is an original eclipse/black-hole motif and the visible wordmark is only `SMTH`.
+
+The first desktop shell is Sway + Waybar + Wofi, with custom GTK/Wofi styling. The `ahian` command toggles a second flat-colour wallpaper, alternate window spacing/borders and a pulsing two-colour Waybar indicator. It is an early shell effect, not yet a full compositor-wide animated theme.
