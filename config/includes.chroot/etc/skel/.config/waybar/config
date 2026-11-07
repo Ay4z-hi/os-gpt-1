@@ -1,12 +1,35 @@
 {
-  "layer":"top","position":"bottom","height":42,"spacing":8,
-  "modules-left":["sway/workspaces","sway/mode"],
-  "modules-center":["sway/window"],
-  "modules-right":["network","pulseaudio","bluetooth","battery","clock","tray"],
-  "clock":{"format":"{:%H:%M  %a %d}"},
-  "network":{"format-wifi":"WIFI {signalStrength}%","format-ethernet":"ETH","format-disconnected":"OFFLINE"},
-  "pulseaudio":{"format":"VOL {volume}%","format-muted":"MUTE"},
-  "battery":{"format":"BAT {capacity}%"},
-  "bluetooth":{"format":"BT {status}"},
-  "sway/workspaces":{"format":"{name}"}
+  "layer": "top",
+  "position": "bottom",
+  "height": 48,
+  "spacing": 8,
+  "margin-left": 14,
+  "margin-right": 14,
+  "margin-bottom": 8,
+  "modules-left": ["sway/workspaces", "custom/ahian"],
+  "modules-center": ["sway/window"],
+  "modules-right": ["network", "pulseaudio", "bluetooth", "battery", "clock", "tray"],
+  "sway/workspaces": {
+    "format": "{name}",
+    "disable-scroll": true,
+    "all-outputs": true
+  },
+  "custom/ahian": {
+    "exec": "smth-ahian-status",
+    "return-type": "json",
+    "interval": 1,
+    "format": "{}",
+    "tooltip": false
+  },
+  "clock": {"format": "{:%H:%M  %a %d}", "tooltip": false},
+  "network": {
+    "format-wifi": "WIFI {signalStrength}%",
+    "format-ethernet": "ETH",
+    "format-disconnected": "OFFLINE",
+    "tooltip-format": "{ifname}: {ipaddr}"
+  },
+  "pulseaudio": {"format": "VOL {volume}%", "format-muted": "MUTE"},
+  "bluetooth": {"format": "BT {status}", "format-disabled": "BT OFF"},
+  "battery": {"format": "BAT {capacity}%"},
+  "tray": {"spacing": 8}
 }
