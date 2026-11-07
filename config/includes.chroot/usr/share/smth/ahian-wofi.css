@@ -1,7 +1,7 @@
 window {
   background-color: #000000;
   color: #FFFFFF;
-  border: 2px solid #FF315A;
+  border: 2px solid #A56EFF;
   border-radius: 14px;
   font-family: Inter, sans-serif;
   font-size: 14px;
@@ -9,7 +9,7 @@ window {
 #input {
   background-color: #000000;
   color: #FFFFFF;
-  border: 1px solid #20D9C2;
+  border: 1px solid #C8F169;
   border-radius: 8px;
   margin: 10px;
   padding: 10px;
@@ -22,7 +22,7 @@ window {
   transition: background-color 180ms ease;
 }
 #entry:selected {
-  background-color: #20D9C2;
+  background-color: #C8F169;
   color: #000000;
 }
 #text { color: #FFFFFF; }
