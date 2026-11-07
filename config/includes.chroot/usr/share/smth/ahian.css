@@ -1,7 +1,7 @@
 * { font-family: Inter, sans-serif; font-size: 12px; }
 @keyframes pulse { from { opacity: .45; } to { opacity: 1; } }
-window#waybar { background: rgba(0,0,0,.88); color: #fff; border-top: 1px solid #20D9C2; }
+window#waybar { background: rgba(0,0,0,.88); color: #fff; border-top: 1px solid #C8F169; }
 #workspaces button { color: #aaa; border-radius: 12px; padding: 0 12px; transition: all .2s ease; }
-#workspaces button.focused { color: #fff; border-bottom: 2px solid #FF315A; animation: pulse 1.2s ease-in-out infinite alternate; }
-#clock { color: #20D9C2; font-weight: 800; letter-spacing: 2px; }
+#workspaces button.focused { color: #fff; border-bottom: 2px solid #A56EFF; animation: pulse 1.2s ease-in-out infinite alternate; }
+#clock { color: #C8F169; font-weight: 800; letter-spacing: 2px; }
 #network, #pulseaudio, #battery, #bluetooth, #tray { padding: 0 10px; }
