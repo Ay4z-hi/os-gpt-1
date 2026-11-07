@@ -1,0 +1,60 @@
+name: Build SMTH launchers
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "apps/launcher/**"
+      - ".github/workflows/build-launchers.yml"
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Generate Android platform and build
+        shell: bash
+        run: |
+          cd apps/launcher
+          cp lib/main.dart /tmp/smth_main.dart
+          cp pubspec.yaml /tmp/smth_pubspec.yaml
+          flutter create --platforms=android --project-name smth_launcher --org dev.smth --empty .
+          cp /tmp/smth_main.dart lib/main.dart
+          cp /tmp/smth_pubspec.yaml pubspec.yaml
+          flutter pub get
+          flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SMTH-Android-APK
+          path: apps/launcher/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Generate Windows platform and build
+        shell: bash
+        run: |
+          cd apps/launcher
+          cp lib/main.dart /tmp/smth_main.dart
+          cp pubspec.yaml /tmp/smth_pubspec.yaml
+          flutter create --platforms=windows --project-name smth_launcher --org dev.smth --empty .
+          cp /tmp/smth_main.dart lib/main.dart
+          cp /tmp/smth_pubspec.yaml pubspec.yaml
+          flutter pub get
+          flutter build windows --release
+      - name: Package Windows app
+        shell: pwsh
+        run: Compress-Archive -Path apps/launcher/build/windows/x64/runner/Release/* -DestinationPath SMTH-Windows-Launcher.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: SMTH-Windows-Launcher
+          path: SMTH-Windows-Launcher.zip
+          if-no-files-found: error
