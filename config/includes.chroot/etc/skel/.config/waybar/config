@@ -6,13 +6,18 @@
   "margin-left": 14,
   "margin-right": 14,
   "margin-bottom": 8,
-  "modules-left": ["sway/workspaces", "custom/ahian"],
+  "modules-left": ["custom/start", "sway/workspaces", "custom/ahian"],
   "modules-center": ["sway/window"],
   "modules-right": ["network", "pulseaudio", "bluetooth", "battery", "clock", "tray"],
   "sway/workspaces": {
     "format": "{name}",
     "disable-scroll": true,
     "all-outputs": true
+  },
+  "custom/start": {
+    "format": "SMTH",
+    "on-click": "wofi --show drun",
+    "tooltip": false
   },
   "custom/ahian": {
     "exec": "smth-ahian-status",
