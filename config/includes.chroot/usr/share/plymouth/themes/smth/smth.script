@@ -9,8 +9,8 @@ track_image = Image.Text("------------------------", "Sans 12", "FFFFFF");
 track_sprite = Sprite(track_image);
 progress_image = Image.Text("●", "Sans 18", "FF315A");
 progress_sprite = Sprite(progress_image);
-teal_image = Image.Text("●", "Sans 18", "20D9C2");
-teal_sprite = Sprite(teal_image);
+lime_image = Image.Text("●", "Sans 18", "20D9C2");
+lime_sprite = Sprite(lime_image);
 
 fun refresh_callback() {
   w = Window.GetWidth();
@@ -23,8 +23,8 @@ fun refresh_callback() {
   track_sprite.SetY(h / 2 + 58);
   progress_sprite.SetX(w / 2 - 150);
   progress_sprite.SetY(h / 2 + 52);
-  teal_sprite.SetX(w / 2 + 150);
-  teal_sprite.SetY(h / 2 + 52);
+  lime_sprite.SetX(w / 2 + 150);
+  lime_sprite.SetY(h / 2 + 52);
 }
 fun boot_progress_callback(duration, progress) {
   w = Window.GetWidth();
