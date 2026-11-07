@@ -11,6 +11,7 @@ thunar-archive-plugin
 firefox-esr
 network-manager
 network-manager-gnome
+nm-connection-editor
 bluez
 blueman
 pipewire
@@ -20,6 +21,7 @@ pavucontrol
 mako-notifier
 libnotify-bin
 brightnessctl
+wdisplays
 xwayland
 dbus-user-session
 greetd
