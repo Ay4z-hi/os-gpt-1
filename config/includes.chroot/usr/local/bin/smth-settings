@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+choice=$(printf 'Display & Appearance\nWi-Fi & Network\nBluetooth\nSound & Audio\nPower / Session' | wofi --dmenu --prompt 'SMTH / SETTINGS')
+case "$choice" in
+  "Display & Appearance")
+    if command -v wdisplays >/dev/null 2>&1; then exec wdisplays; fi
+    notify-send "SMTH Settings" "Display editor is not available on this device" ;;
+  "Wi-Fi & Network") exec nm-connection-editor ;;
+  Bluetooth) exec blueman-manager ;;
+  "Sound & Audio") exec pavucontrol ;;
+  "Power / Session") exec smth-session-exit ;;
+  *) exit 0 ;;
+esac
