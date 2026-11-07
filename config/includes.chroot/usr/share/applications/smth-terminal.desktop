@@ -3,6 +3,6 @@ Type=Application
 Name=SMTH Terminal
 Comment=SMTH command line
 Exec=foot
-Icon=smth-mark
+Icon=smth-terminal
 Terminal=false
 Categories=System;TerminalEmulator;
