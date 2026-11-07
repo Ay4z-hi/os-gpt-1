@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+MODE="${1:-normal}"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/smth"
+mkdir -p "$CONFIG"
+if [ "$MODE" = ahian ]; then
+  WALL="/usr/share/backgrounds/smth/smth-eclipse.svg"
+else
+  WALL="/usr/share/backgrounds/smth/smth-eclipse.svg"
+fi
+if command -v swaymsg >/dev/null 2>&1 && [ -f "$WALL" ]; then
+  swaymsg "output * bg $WALL fill" >/dev/null 2>&1 || true
+fi
