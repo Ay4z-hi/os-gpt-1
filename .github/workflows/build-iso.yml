@@ -26,23 +26,24 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Install Debian Live-Build toolchain
+      - name: Build in Debian Bookworm
         run: |
-          sudo apt-get update
-          sudo apt-get install -y live-build debootstrap squashfs-tools xorriso \
-            grub-pc-bin grub-efi-amd64-bin mtools dosfstools librsvg2-bin
-
-      - name: Prepare SMTH configuration
-        run: |
-          chmod +x auto/config
-          chmod +x scripts/*.sh
-          chmod +x config/hooks/normal/*.hook.chroot
-          chmod +x config/includes.chroot/usr/local/bin/*
-          sudo ./auto/config
-          sudo ./scripts/prepare-bootloaders.sh
-
-      - name: Build bootable live ISO
-        run: sudo lb build
+          docker run --rm --privileged \
+            -v "$PWD:/work" -w /work debian:bookworm \
+            bash -lc '
+              set -e
+              apt-get update
+              DEBIAN_FRONTEND=noninteractive apt-get install -y \
+                live-build debootstrap squashfs-tools xorriso \
+                grub-pc-bin grub-efi-amd64-bin mtools dosfstools \
+                librsvg2-bin
+              chmod +x auto/config scripts/*.sh
+              chmod +x config/hooks/normal/*.hook.chroot
+              chmod +x config/includes.chroot/usr/local/bin/*
+              ./auto/config
+              ./scripts/prepare-bootloaders.sh
+              lb build
+            '
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
