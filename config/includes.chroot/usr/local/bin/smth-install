@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+if [ "$#" -lt 1 ]; then
+  echo "Usage: smth-install PACKAGE [PACKAGE ...]"
+  exit 2
+fi
+for package in "$@"; do
+  case "$package" in
+    ""|-*|*[!a-zA-Z0-9.+-]*)
+      echo "Invalid package name: $package" >&2
+      exit 2
+      ;;
+  esac
+done
+exec pkexec apt-get install --no-install-recommends "$@"
