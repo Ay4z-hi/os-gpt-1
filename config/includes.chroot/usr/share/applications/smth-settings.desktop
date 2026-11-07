@@ -3,6 +3,6 @@ Type=Application
 Name=SMTH Settings
 Comment=Display, network, Bluetooth and sound controls
 Exec=smth-settings
-Icon=smth-mark
+Icon=smth-settings
 Terminal=false
 Categories=Settings;System;
