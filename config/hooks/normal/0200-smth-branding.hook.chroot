@@ -1,10 +1,29 @@
 #!/bin/sh
 set -eu
-# Files are installed by config/includes.chroot. Select the custom theme.
-chmod 0755 /usr/local/bin/smth-wallpaper /usr/local/bin/smth-session-exit /usr/local/bin/smth-install /usr/local/bin/smth-settings /usr/local/bin/smth-app-installer /usr/local/bin/ahian 2>/dev/null || true
+# The branded artwork is copied by live-build from config/includes.chroot.
+chmod 0755 \
+  /usr/local/bin/smth-wallpaper \
+  /usr/local/bin/smth-session-exit \
+  /usr/local/bin/smth-install \
+  /usr/local/bin/smth-settings \
+  /usr/local/bin/smth-app-installer \
+  /usr/local/bin/smth-ahian-status \
+  /usr/local/bin/ahian
+
+# Select SMTH's own boot splash and bake it into the live initramfs.
+if command -v plymouth-set-default-theme >/dev/null 2>&1; then
+  plymouth-set-default-theme smth || true
+fi
+if command -v update-initramfs >/dev/null 2>&1; then
+  update-initramfs -u -k all || true
+fi
+
+# Ensure the new live user's desktop shortcuts are executable.
 if [ -d /etc/skel/Desktop ]; then
   chmod 0755 /etc/skel/Desktop/*.desktop 2>/dev/null || true
 fi
-if command -v plymouth-set-default-theme >/dev/null 2>&1; then
-  plymouth-set-default-theme smth || true
+
+# Use the custom GTK icon set by default.
+if [ -d /usr/share/icons/SMTH ]; then
+  gtk-update-icon-cache -f /usr/share/icons/SMTH 2>/dev/null || true
 fi
