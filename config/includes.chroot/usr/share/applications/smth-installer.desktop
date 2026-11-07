@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SMTH App Installer
+Comment=Install software from signed Debian repositories
+Exec=smth-app-installer
+Icon=smth-mark
+Terminal=false
+Categories=System;PackageManager;
