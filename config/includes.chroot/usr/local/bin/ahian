@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+MODE="${1:-on}"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+WALL=/usr/share/backgrounds/smth/smth-eclipse.svg
+case "$MODE" in
+ on)
+  mkdir -p "$CONFIG/waybar" "$CONFIG/smth"
+  cp /usr/share/smth/ahian.css "$CONFIG/waybar/style.css"
+  touch "$CONFIG/smth/ahian.enabled"
+  swaymsg "output * bg $WALL fill" >/dev/null 2>&1 || true
+  pkill -USR2 waybar 2>/dev/null || true
+  notify-send "SMTH" "AHIAN visual mode enabled" 2>/dev/null || true ;;
+ off|--off)
+  mkdir -p "$CONFIG/waybar" "$CONFIG/smth"
+  cp /etc/skel/.config/waybar/style.css "$CONFIG/waybar/style.css" 2>/dev/null || true
+  rm -f "$CONFIG/smth/ahian.enabled"
+  swaymsg "output * bg $WALL fill" >/dev/null 2>&1 || true
+  pkill -USR2 waybar 2>/dev/null || true
+  notify-send "SMTH" "AHIAN visual mode disabled" 2>/dev/null || true ;;
+ *) echo "Usage: ahian [on|off|--off]"; exit 2 ;;
+esac
