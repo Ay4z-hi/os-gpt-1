@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#000"/>
+<ellipse cx="960" cy="480" rx="520" ry="205" fill="none" stroke="#FF315A" stroke-width="3" opacity=".85" transform="rotate(-13 960 480)"/>
+<ellipse cx="960" cy="480" rx="430" ry="166" fill="none" stroke="#20D9C2" stroke-width="2" opacity=".9" transform="rotate(-13 960 480)"/>
+<circle cx="960" cy="480" r="132" fill="#000" stroke="#242424" stroke-width="3"/>
+<g fill="#20D9C2"><circle cx="530" cy="385" r="5"/><circle cx="565" cy="350" r="3"/><circle cx="602" cy="325" r="4"/><circle cx="1365" cy="575" r="5"/><circle cx="1328" cy="610" r="3"/><circle cx="1290" cy="635" r="4"/></g>
+<g fill="#FF315A"><circle cx="690" cy="300" r="4"/><circle cx="725" cy="278" r="3"/><circle cx="1195" cy="660" r="4"/></g>
+<text x="960" y="865" fill="#fff" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="700" letter-spacing="18" text-anchor="middle">SMTH</text>
+</svg>
