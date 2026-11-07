@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+WALL=/usr/share/backgrounds/smth/smth-eclipse.svg
+if command -v swaymsg >/dev/null 2>&1 && [ -r "$WALL" ]; then
+  swaymsg "output * bg $WALL fill" >/dev/null 2>&1 || true
+fi
