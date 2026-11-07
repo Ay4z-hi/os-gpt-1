@@ -3,6 +3,6 @@ Type=Application
 Name=SMTH Web
 Comment=Lightweight web browsing
 Exec=firefox-esr --new-window
-Icon=smth-mark
+Icon=smth-web
 Terminal=false
 Categories=Network;WebBrowser;
