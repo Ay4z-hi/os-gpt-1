@@ -7,7 +7,7 @@ A compact, bootable **amd64 live desktop ISO**. No Android APK or Windows EXE la
 ## Added to source
 
 - Sway Wayland session with Waybar panel and Wofi start menu
-- Custom black/white desktop styling with exactly two accent colours: coral `#FF315A` and teal `#20D9C2`
+- Custom black/white desktop styling with exactly two accent colours: violet `#A56EFF` and lime `#C8F169`
 - Custom SVG black-hole/eclipse wallpapers and icon theme
 - `ahian` command: toggles an alternate wallpaper, larger window spacing, stronger borders and animated Waybar accent
 - Custom Plymouth loading screen with SMTH wordmark and progress indicator
