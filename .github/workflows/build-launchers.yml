@@ -50,6 +50,7 @@ jobs:
           cp /tmp/smth_pubspec.yaml pubspec.yaml
           flutter pub get
           flutter build windows --release
+          Copy-Item build/windows/x64/runner/Release/smth_launcher.exe build/windows/x64/runner/Release/SMTH-Launcher.exe
       - name: Package Windows app
         shell: pwsh
         run: Compress-Archive -Path apps/launcher/build/windows/x64/runner/Release/* -DestinationPath SMTH-Windows-Launcher.zip
