@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=SMTH Terminal
+Comment=SMTH command line
+Exec=foot
+Icon=utilities-terminal
+Terminal=false
+Categories=System;TerminalEmulator;
