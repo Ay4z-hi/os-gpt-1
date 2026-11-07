@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+STATE="${XDG_CONFIG_HOME:-$HOME/.config}/smth/ahian.enabled"
+if [ -e "$STATE" ]; then
+  printf '{"text":"●  AHIAN","class":"ahian","tooltip":"AHIAN visual mode is active"}\n'
+else
+  printf '{"text":"SMTH","class":"normal","tooltip":"SMTH OS"}\n'
+fi
