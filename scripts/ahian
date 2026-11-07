@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+MODE="${1:-on}"
+case "$MODE" in
+  on)
+    mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/smth"
+    touch "${XDG_CONFIG_HOME:-$HOME/.config}/smth/ahian.enabled"
+    notify-send "SMTH" "AHIAN visual mode enabled" 2>/dev/null || true
+    ;;
+  off|--off)
+    rm -f "${XDG_CONFIG_HOME:-$HOME/.config}/smth/ahian.enabled"
+    notify-send "SMTH" "AHIAN visual mode disabled" 2>/dev/null || true
+    ;;
+  *) echo "Usage: ahian [on|off|--off]"; exit 2 ;;
+esac
