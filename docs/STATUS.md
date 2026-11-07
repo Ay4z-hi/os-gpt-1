@@ -9,6 +9,7 @@ This repository contains an initial Debian Live-Build desktop foundation.
 - SMTH Files launcher backed by Thunar, including desktop shortcut
 - SMTH Web launcher backed by Firefox ESR, including desktop shortcut
 - SMTH Settings menu for display, network, Bluetooth, sound, and session controls
+- SMTH App Installer shortcut for installing packages from signed Debian repositories
 - NetworkManager and BlueZ packages for Wi-Fi/Ethernet and Bluetooth
 - PipeWire/WirePlumber audio stack and Mako notification daemon
 - Custom black-hole/eclipse SVG logo and wallpaper; only coral and teal accent dots
