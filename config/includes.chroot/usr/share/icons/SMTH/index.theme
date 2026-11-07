@@ -1,0 +1,12 @@
+[Icon Theme]
+Name=SMTH
+Comment=SMTH monochrome icon system
+Inherits=hicolor
+Directories=scalable/apps
+
+[scalable/apps]
+Size=48
+Type=Scalable
+Context=Applications
+MinSize=16
+MaxSize=512
