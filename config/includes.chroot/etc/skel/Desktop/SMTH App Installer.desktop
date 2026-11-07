@@ -3,5 +3,5 @@ Type=Application
 Name=SMTH App Installer
 Comment=Install applications
 Exec=smth-app-installer
-Icon=smth-mark
+Icon=smth-installer
 Terminal=false
