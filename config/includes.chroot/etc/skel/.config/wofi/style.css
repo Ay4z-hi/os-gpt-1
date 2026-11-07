@@ -1,7 +1,7 @@
 window {
   background-color: #000000;
   color: #FFFFFF;
-  border: 1px solid #20D9C2;
+  border: 1px solid #C8F169;
   border-radius: 14px;
   font-family: Inter, sans-serif;
   font-size: 14px;
@@ -16,5 +16,5 @@ window {
 }
 #inner-box, #outer-box { background-color: #000000; }
 #entry { padding: 10px; margin: 3px; border-radius: 8px; }
-#entry:selected { background-color: #FF315A; color: #000000; }
+#entry:selected { background-color: #A56EFF; color: #000000; }
 #text { color: #FFFFFF; }
