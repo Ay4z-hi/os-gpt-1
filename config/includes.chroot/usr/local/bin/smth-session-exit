@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+choice=$(printf 'Lock\nLogout\nReboot\nPower off\nCancel' | wofi --dmenu --prompt 'SMTH / SESSION')
+case "$choice" in
+  Lock) loginctl lock-session ;;
+  Logout) swaymsg exit ;;
+  Reboot) systemctl reboot ;;
+  "Power off") systemctl poweroff ;;
+  *) exit 0 ;;
+esac
