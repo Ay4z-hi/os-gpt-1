@@ -4,6 +4,7 @@ systemctl enable NetworkManager.service
 systemctl enable bluetooth.service
 systemctl enable systemd-timesyncd.service
 systemctl enable greetd.service
+systemctl enable zramswap.service 2>/dev/null || true
 if ! id smth >/dev/null 2>&1; then
   useradd -m -s /bin/bash -G sudo,audio,video,plugdev smth
 fi
