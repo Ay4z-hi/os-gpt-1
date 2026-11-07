@@ -1,0 +1,12 @@
+{
+  "layer":"top","position":"bottom","height":42,"spacing":8,
+  "modules-left":["sway/workspaces","sway/mode"],
+  "modules-center":["sway/window"],
+  "modules-right":["network","pulseaudio","bluetooth","battery","clock","tray"],
+  "clock":{"format":"{:%H:%M  %a %d}"},
+  "network":{"format-wifi":"WIFI {signalStrength}%","format-ethernet":"ETH","format-disconnected":"OFFLINE"},
+  "pulseaudio":{"format":"VOL {volume}%","format-muted":"MUTE"},
+  "battery":{"format":"BAT {capacity}%"},
+  "bluetooth":{"format":"BT {status}"},
+  "sway/workspaces":{"format":"{name}"}
+}
