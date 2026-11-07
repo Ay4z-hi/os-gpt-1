@@ -1,0 +1,22 @@
+# SMTH OS Wayland session starter
+set $mod Mod4
+font pango:Inter 10
+floating_modifier $mod normal
+default_border pixel 2
+default_floating_border pixel 2
+gaps inner 8
+gaps outer 6
+client.focused #FF315A #121212 #FFFFFF #FF315A #FF315A
+client.unfocused #303030 #000000 #A0A0A0 #303030 #303030
+exec waybar
+exec mako
+exec nm-applet
+exec blueman-applet
+bindsym $mod+Return exec foot
+bindsym $mod+d exec wofi --show drun
+bindsym $mod+e exec thunar
+bindsym $mod+b exec firefox-esr
+bindsym $mod+Shift+q kill
+bindsym $mod+f fullscreen toggle
+bindsym $mod+space floating toggle
+bindsym $mod+Shift+e exec smth-session-exit
