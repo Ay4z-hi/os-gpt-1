@@ -76,7 +76,7 @@ class SmthLauncher:
         if not iso.lower().endswith(".iso"):
             messagebox.showerror("SMTH OS", "The selected file must be an ISO.")
             return
-        args = [qemu, "-machine", "q35", "-accel", "whpx:tcg",
+        args = [qemu, "-machine", "q35", "-accel", "tcg,thread=multi",
                 "-cpu", "max", "-smp", str(self.cpus.get()),
                 "-m", str(self.ram.get()), "-cdrom", iso, "-boot", "d",
                 "-vga", "virtio", "-device", "usb-tablet",
