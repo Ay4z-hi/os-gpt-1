@@ -6,9 +6,9 @@
   min-height: 0;
 }
 @keyframes ahian-pulse {
-  0% { color: #FF315A; }
-  50% { color: #20D9C2; }
-  100% { color: #FF315A; }
+  0% { color: #A56EFF; }
+  50% { color: #C8F169; }
+  100% { color: #A56EFF; }
 }
 window#waybar {
   background: #000000;
@@ -28,8 +28,8 @@ window#waybar {
 }
 #custom-start:hover {
   color: #000000;
-  background: #FF315A;
-  border-color: #FF315A;
+  background: #A56EFF;
+  border-color: #A56EFF;
 }
 #workspaces { padding: 4px 8px; }
 #workspaces button {
@@ -42,21 +42,21 @@ window#waybar {
 }
 #workspaces button.focused {
   color: #000000;
-  background: #20D9C2;
-  border-color: #20D9C2;
+  background: #C8F169;
+  border-color: #C8F169;
 }
 #workspaces button.urgent {
   color: #000000;
-  background: #FF315A;
-  border-color: #FF315A;
+  background: #A56EFF;
+  border-color: #A56EFF;
 }
 #window { color: #FFFFFF; font-weight: 600; }
-#clock { color: #20D9C2; font-weight: 800; letter-spacing: 1px; }
+#clock { color: #C8F169; font-weight: 800; letter-spacing: 1px; }
 #network, #pulseaudio, #battery, #bluetooth, #tray {
   color: #FFFFFF;
   padding: 0 10px;
 }
-#custom-ahian { color: #FF315A; padding: 0 10px; }
+#custom-ahian { color: #A56EFF; padding: 0 10px; }
 #custom-ahian.ahian {
   animation: ahian-pulse 1.1s steps(2, end) infinite;
   font-weight: 900;
