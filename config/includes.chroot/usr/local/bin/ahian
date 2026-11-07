@@ -14,7 +14,7 @@ enable_mode() {
   swaymsg "gaps inner 14" >/dev/null 2>&1 || true
   swaymsg "gaps outer 14" >/dev/null 2>&1 || true
   swaymsg "default_border pixel 3" >/dev/null 2>&1 || true
-  swaymsg "client.focused #20D9C2 #000000 #FFFFFF #FF315A #20D9C2" >/dev/null 2>&1 || true
+  swaymsg "client.focused #C8F169 #000000 #FFFFFF #A56EFF #C8F169" >/dev/null 2>&1 || true
   pkill -USR2 waybar 2>/dev/null || true
   notify-send "SMTH / AHIAN" "Visual mode activated" 2>/dev/null || true
 }
@@ -25,7 +25,7 @@ disable_mode() {
   swaymsg "gaps inner 8" >/dev/null 2>&1 || true
   swaymsg "gaps outer 8" >/dev/null 2>&1 || true
   swaymsg "default_border pixel 2" >/dev/null 2>&1 || true
-  swaymsg "client.focused #FF315A #000000 #FFFFFF #20D9C2 #FF315A" >/dev/null 2>&1 || true
+  swaymsg "client.focused #A56EFF #000000 #FFFFFF #C8F169 #A56EFF" >/dev/null 2>&1 || true
   pkill -USR2 waybar 2>/dev/null || true
   notify-send "SMTH" "AHIAN mode deactivated" 2>/dev/null || true
 }
