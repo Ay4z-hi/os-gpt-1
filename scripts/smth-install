@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+if [ "$#" -lt 1 ]; then
+  echo "Usage: smth-install PACKAGE"
+  echo "Installs a package from the configured Debian repositories."
+  exit 2
+fi
+case "$1" in
+  -*|*..*|*/*) echo "Invalid package name: $1" >&2; exit 2 ;;
+esac
+exec pkexec apt-get install --no-install-recommends "$@"
