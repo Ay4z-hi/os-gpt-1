@@ -1,19 +1,34 @@
 Window.SetBackgroundTopColor(0, 0, 0);
 Window.SetBackgroundBottomColor(0, 0, 0);
+
 logo_image = Image.Text("SMTH", "Sans Bold 34", "FFFFFF");
 logo_sprite = Sprite(logo_image);
-coral_image = Image.Text("●", "Sans 18", "FF315A");
-coral_sprite = Sprite(coral_image);
+tag_image = Image.Text("SYSTEM STARTING", "Sans 10", "FFFFFF");
+tag_sprite = Sprite(tag_image);
+track_image = Image.Text("------------------------", "Sans 12", "FFFFFF");
+track_sprite = Sprite(track_image);
+progress_image = Image.Text("●", "Sans 18", "FF315A");
+progress_sprite = Sprite(progress_image);
 teal_image = Image.Text("●", "Sans 18", "20D9C2");
 teal_sprite = Sprite(teal_image);
+
 fun refresh_callback() {
   w = Window.GetWidth();
   h = Window.GetHeight();
   logo_sprite.SetX(w / 2 - logo_image.GetWidth() / 2);
-  logo_sprite.SetY(h / 2 - logo_image.GetHeight() / 2);
-  coral_sprite.SetX(w / 2 + 76);
-  coral_sprite.SetY(h / 2 + 3);
-  teal_sprite.SetX(w / 2 + 92);
-  teal_sprite.SetY(h / 2 + 3);
+  logo_sprite.SetY(h / 2 - 42);
+  tag_sprite.SetX(w / 2 - tag_image.GetWidth() / 2);
+  tag_sprite.SetY(h / 2 + 18);
+  track_sprite.SetX(w / 2 - track_image.GetWidth() / 2);
+  track_sprite.SetY(h / 2 + 58);
+  progress_sprite.SetX(w / 2 - 150);
+  progress_sprite.SetY(h / 2 + 52);
+  teal_sprite.SetX(w / 2 + 150);
+  teal_sprite.SetY(h / 2 + 52);
+}
+fun boot_progress_callback(duration, progress) {
+  w = Window.GetWidth();
+  progress_sprite.SetX(w / 2 - 150 + (300 * progress));
 }
 Plymouth.SetRefreshFunction(refresh_callback);
+Plymouth.SetBootProgressFunction(boot_progress_callback);
