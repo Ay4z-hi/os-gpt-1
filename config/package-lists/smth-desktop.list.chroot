@@ -1,6 +1,8 @@
 # SMTH OS minimal Wayland desktop foundation
-# Keep this list intentionally small; optional apps belong in separate lists.
 sway
+swaybg
+swayidle
+swaylock
 waybar
 wofi
 foot
@@ -16,6 +18,7 @@ pipewire-audio
 wireplumber
 pavucontrol
 mako-notifier
+libnotify-bin
 brightnessctl
 xwayland
 dbus-user-session
@@ -27,6 +30,7 @@ gvfs-backends
 file-roller
 plymouth
 plymouth-themes
+librsvg2-common
 fonts-inter
 fonts-dejavu-core
 curl
