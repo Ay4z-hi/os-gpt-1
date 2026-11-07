@@ -1,57 +1,35 @@
 # SMTH OS
 
-A hybrid desktop and mobile operating system project focused on a distinctive, minimal interface and continuity across devices.
+A hybrid desktop/mobile operating system project with an original eclipse identity, a Wayland desktop foundation, and a long-term goal of touch-to-desktop continuity.
 
-> **Project status:** Early planning. Features described here are goals, not completed functionality.
+> **Status: early prototype.** The repository contains a first amd64 live-build foundation. It is not yet a finished OS, and no ISO has been validated.
 
-## Vision
+## Current foundation
 
-SMTH OS aims to combine:
-- A touch-friendly mobile experience with a desktop-style workspace.
-- Resizable windows, tabs, and a taskbar/panel.
-- A distinctive monochrome visual identity with restrained accent colors.
-- Essential system settings and services for networking, audio, power, and notifications.
-- Separate build targets for supported ARM64 and x86_64 devices.
+- Debian Bookworm Live-Build configuration for x86_64
+- Sway Wayland session, Waybar panel, Wofi launcher, Foot terminal
+- SMTH Files launcher (currently backed by Thunar)
+- SMTH Web launcher (currently backed by Firefox ESR)
+- NetworkManager and BlueZ for Wi-Fi/Ethernet and Bluetooth
+- PipeWire/WirePlumber audio and Mako notifications
+- Plymouth SMTH boot splash prototype
+- Custom black-hole/eclipse SVG mark and wallpaper
+- Two accent colours only: coral `#FF315A` and teal `#20D9C2`
+- `ahian` command prototype for a more animated Waybar treatment
+- APT package install wrapper and manual GitHub Actions ISO workflow
 
-## Planned components
+## Build
 
-- **SMTH Shell:** desktop session and window experience.
-- **SMTH Panel:** taskbar, launcher, and system indicators.
-- **SMTH Files:** file manager.
-- **SMTH Settings:** display, appearance, network, sound, and power settings.
-- **SMTH Terminal:** command-line access.
-- **SMTH Notify:** notification service.
-- **SMTH Store:** application/package management interface.
-- **AHIAN mode:** optional animated visual mode, with a way to turn it off.
+See [docs/BUILD.md](docs/BUILD.md).
 
-## Development principles
+## Architecture and roadmap
 
-1. Build a bootable foundation first.
-2. Add the compositor and shell before polishing applications.
-3. Integrate existing Linux services where practical instead of reimplementing them.
-4. Keep licensing and third-party notices available.
-5. Document which features are implemented, experimental, or planned.
+- [Architecture blueprint](docs/ARCHITECTURE.md)
+- [Implementation status](docs/STATUS.md)
+- [ARM64 device support plan](docs/ARM64.md)
 
-## Initial technical direction
+## Important
 
-The initial desktop direction is a Debian-based Linux system using a Wayland compositor and established services such as NetworkManager, BlueZ, PipeWire, and systemd. Exact choices may change as prototypes are tested.
+The first build is amd64 desktop Linux. ARM64 phone support requires a named device, compatible kernel/firmware, boot chain, GPU/display/touch drivers, and a separate image process. WinTabs, the Android launcher, CoreLink, and custom native apps remain future milestones.
 
-## Roadmap
-
-- [x] Initial project repository
-- [x] Project README
-- [ ] Repository structure and project documentation
-- [ ] Bootable x86_64 development image
-- [ ] Wayland session and SMTH Shell prototype
-- [ ] Panel, launcher, and window management
-- [ ] Settings and core system integrations
-- [ ] Essential applications
-- [ ] ARM64 support for selected devices
-
-## Contributing
-
-This project is in its early stages. Design notes, prototypes, testing, and documentation are welcome.
-
-## Disclaimer
-
-SMTH OS is an independent project and is not affiliated with Debian, Android, Microsoft, or any other platform mentioned in its technical direction.
+SMTH OS is an independent project and is not affiliated with Debian, Android, Microsoft, or any other platform.
