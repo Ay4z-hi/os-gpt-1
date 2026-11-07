@@ -1,0 +1,37 @@
+# SMTH OS minimal Wayland desktop foundation
+# Keep this list intentionally small; optional apps belong in separate lists.
+sway
+waybar
+wofi
+foot
+thunar
+thunar-archive-plugin
+firefox-esr
+network-manager
+network-manager-gnome
+bluez
+blueman
+pipewire
+pipewire-audio
+wireplumber
+pavucontrol
+mako-notifier
+brightnessctl
+xwayland
+dbus-user-session
+polkitd
+policykit-1-gnome
+udisks2
+gvfs
+gvfs-backends
+file-roller
+plymouth
+plymouth-themes
+fonts-inter
+fonts-dejavu-core
+curl
+ca-certificates
+sudo
+zsh
+git
+flatpak
