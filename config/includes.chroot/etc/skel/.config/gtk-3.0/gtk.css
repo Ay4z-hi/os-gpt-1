@@ -1,0 +1,9 @@
+@define-color theme_bg_color #000000;
+@define-color theme_fg_color #FFFFFF;
+@define-color theme_selected_bg_color #20D9C2;
+@define-color theme_selected_fg_color #000000;
+@define-color accent_color #FF315A;
+window, dialog, popover, menu { background: #000000; color: #FFFFFF; }
+button { background: #000000; color: #FFFFFF; border: 1px solid #FFFFFF; border-radius: 9px; }
+button:hover, button:checked { background: #20D9C2; color: #000000; }
+entry, textview, list, row { background: #000000; color: #FFFFFF; }
