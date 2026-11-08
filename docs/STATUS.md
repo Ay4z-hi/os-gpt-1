@@ -31,3 +31,15 @@ A compact, bootable **amd64 live desktop ISO**. No Android APK or Windows EXE la
 - Installer for installing SMTH onto a PC drive
 
 Do not call the ISO complete until CI succeeds and the image boots in QEMU.
+
+
+## Desktop interaction refresh (2026-11-08)
+
+- Added Sway portrait-output detection and automatic 90-degree landscape rotation.
+- Replaced the desktop wallpaper with original orbital artwork; redrawn the SMTH SVG app glyphs and boot progress accents.
+- Added a visible cursor theme, IBM Plex typography and a direct panel entry for the SMTH App Store.
+- Reworked SMTH Settings to control NetworkManager Wi-Fi, Bluetooth power, PipeWire mute, display layout, wallpaper and AHian mode.
+- Added an APT-backed optional app catalogue; optional apps install on demand to keep the base image lean.
+- Launcher refresh: landscape-locked Android UI, custom pointer, animated wallpaper, external-browser handoff, saved Notes/settings, Calculator, live Clock, app catalogue and local unprivileged shell terminal.
+
+Builds are pending CI verification. Hardware behaviour and display rotation still require testing on physical devices.
