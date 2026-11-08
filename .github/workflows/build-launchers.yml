@@ -1,12 +1,11 @@
 name: Build SMTH launchers
-
 on:
   workflow_dispatch:
   push:
+    branches: [main]
     paths:
       - "apps/launcher/**"
       - ".github/workflows/build-launchers.yml"
-
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -31,7 +30,6 @@ jobs:
           name: SMTH-Android-APK
           path: apps/launcher/build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
-
   windows:
     runs-on: windows-latest
     steps:
