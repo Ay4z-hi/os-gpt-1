@@ -1,12 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
 <rect width="1920" height="1080" fill="#09090D"/>
-<path d="M0 780 430 600 720 720 1120 420 1920 670M0 850 430 670 720 790 1120 490 1920 740M0 920 430 740 720 860 1120 560 1920 810" fill="none" stroke-width="2" stroke="#FFFFFF"/>
-<path d="M0 850 430 670 720 790 1120 490 1920 740" fill="none" stroke="#A56EFF" stroke-width="2"/>
-<path d="M0 920 430 740 720 860 1120 560 1920 810" fill="none" stroke="#C8F169" stroke-width="2"/>
-<g fill="none" stroke-width="2"><path d="M780 380C920 80 1330 110 1500 340s-100 470-380 420S680 520 780 380Z" stroke="#A56EFF"/><path d="M840 370c120-200 430-190 570-10s-60 340-280 320S760 510 840 370Z" stroke="#C8F169"/><path d="M900 370c100-120 310-110 420 20s-30 220-190 220S850 500 900 370Z" stroke="#FFFFFF"/></g>
-<circle cx="1120" cy="450" r="115" fill="#000000" stroke="#FFFFFF" stroke-width="2"/><circle cx="1120" cy="450" r="126" fill="none" stroke="#A56EFF" stroke-width="2"/>
-<g fill="#A56EFF"><circle cx="690" cy="230" r="5"/><circle cx="730" cy="190" r="3"/><circle cx="770" cy="160" r="4"/><circle cx="1510" cy="720" r="5"/><circle cx="1550" cy="750" r="3"/><circle cx="1590" cy="780" r="4"/></g>
-<g fill="#C8F169"><circle cx="570" cy="590" r="5"/><circle cx="610" cy="620" r="3"/><circle cx="650" cy="650" r="4"/><circle cx="1660" cy="300" r="5"/><circle cx="1700" cy="270" r="3"/><circle cx="1740" cy="240" r="4"/></g>
-<g fill="#FFFFFF" font-family="sans-serif"><text x="118" y="220" font-size="16" letter-spacing="8">SMTH / DESKTOP ENVIRONMENT</text><text x="112" y="770" font-size="86" font-weight="700" letter-spacing="15">MAKE SPACE.</text><text x="118" y="820" font-size="22" letter-spacing="6">A QUIETER KIND OF COMPUTING</text><text x="118" y="1000" font-size="13" letter-spacing="5">VIOLET / LIME / MONOCHROME</text></g>
-<path d="M112 250h398" stroke="#C8F169" stroke-width="4"/><path d="M112 275h218" stroke="#A56EFF" stroke-width="4"/>
+<path d="M-120 180 C180 -40 440 40 620 260 S1040 540 1300 310 S1710 40 2050 260" fill="none" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="110"/>
+<path d="M-140 260 C150 40 430 130 620 350 S1050 630 1320 390 S1720 120 2060 340" fill="none" stroke="#A56EFF" stroke-opacity=".34" stroke-width="48"/>
+<path d="M-130 350 C150 120 430 210 620 430 S1050 710 1320 470 S1720 200 2060 420" fill="none" stroke="#C8F169" stroke-opacity=".28" stroke-width="20"/>
+<path d="M-100 470 C200 230 450 330 670 540 S1080 810 1370 560 S1740 300 2050 500" fill="none" stroke="#FFFFFF" stroke-opacity=".12" stroke-width="75"/>
+<path d="M-80 640 C220 390 500 500 710 690 S1110 920 1400 690 S1760 440 2040 630" fill="none" stroke="#A56EFF" stroke-opacity=".24" stroke-width="30"/>
+<path d="M-60 760 C240 510 520 620 740 810 S1140 1040 1430 810 S1780 560 2030 750" fill="none" stroke="#FFFFFF" stroke-opacity=".10" stroke-width="95"/>
+<g fill="none" stroke-width="2"><ellipse cx="1390" cy="520" rx="240" ry="115" stroke="#A56EFF" opacity=".8"/><ellipse cx="1390" cy="520" rx="200" ry="88" stroke="#C8F169" opacity=".8"/><ellipse cx="1390" cy="520" rx="160" ry="63" stroke="#FFFFFF" opacity=".5"/></g>
+<circle cx="1390" cy="520" r="42" fill="#050507"/>
+<g fill="#FFFFFF" font-family="sans-serif"><text x="112" y="150" font-size="18" letter-spacing="9">SMTH / DESKTOP ENVIRONMENT</text><text x="112" y="890" font-size="78" font-weight="700" letter-spacing="13">SPACE, REFINED.</text><text x="118" y="940" font-size="17" letter-spacing="6" opacity=".65">VIOLET / LIME / MONOCHROME</text></g>
+<path d="M112 185 H420" stroke="#A56EFF" stroke-width="3"/><path d="M112 202 H300" stroke="#C8F169" stroke-width="3"/>
 </svg>
