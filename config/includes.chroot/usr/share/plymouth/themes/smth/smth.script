@@ -7,9 +7,9 @@ tag_image = Image.Text("SYSTEM STARTING", "Sans 10", "FFFFFF");
 tag_sprite = Sprite(tag_image);
 track_image = Image.Text("------------------------", "Sans 12", "FFFFFF");
 track_sprite = Sprite(track_image);
-progress_image = Image.Text("●", "Sans 18", "FF315A");
+progress_image = Image.Text("●", "Sans 18", "A56EFF");
 progress_sprite = Sprite(progress_image);
-lime_image = Image.Text("●", "Sans 18", "20D9C2");
+lime_image = Image.Text("●", "Sans 18", "C8F169");
 lime_sprite = Sprite(lime_image);
 
 fun refresh_callback() {
