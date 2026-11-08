@@ -2,11 +2,11 @@
 set -eu
 NORMAL=/usr/share/backgrounds/smth/smth-eclipse.svg
 AHIAN=/usr/share/backgrounds/smth/smth-ahian.svg
-CONFIG="\${XDG_CONFIG_HOME:-$HOME/.config}/smth"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/smth"
 mkdir -p "$CONFIG"
 STATE="$CONFIG/wallpaper"
 apply() { swaymsg "output * bg $1 fill" >/dev/null 2>&1 || true; }
-if [ "\${1:-}" = "--choose" ]; then
+if [ "${1:-}" = "--choose" ]; then
   choice=$(printf 'ECLIPSE / ORBITAL\nAHIAN / FIELD STUDY' | wofi --dmenu --prompt 'SMTH / WALLPAPER')
   case "$choice" in
     "ECLIPSE / ORBITAL") printf '%s' normal > "$STATE"; apply "$NORMAL" ;;
