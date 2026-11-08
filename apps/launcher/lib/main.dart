@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,17 +35,18 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  void open(String n){if(!installed.contains(n)){show('Store');return;}show(n);}
  void show(String n)=>showGeneralDialog(context:context,barrierDismissible:true,barrierLabel:n,barrierColor:Colors.black.withOpacity(.7),transitionDuration:const Duration(milliseconds:240),pageBuilder:(c,a,b)=>Center(child:AppWindow(name:n,ahian:ahian,installed:installed,wifi:wifi,bluetooth:bluetooth,quiet:quiet,contrast:contrast,pointerOn:pointerOn,note:note,terminal:terminal,onClose:()=>Navigator.pop(c),onToggle:(k,v){setState((){switch(k){case'wifi':wifi=v;break;case'bluetooth':bluetooth=v;break;case'quiet':quiet=v;break;case'contrast':contrast=v;break;case'pointer':pointerOn=v;break;}});save(k,v);},onInstall:(name,v){setState((){if(v){installed.add(name);}else{installed.remove(name);}});save('installed',installed.toList());},onNote:(v){note=v;save('note',v);},onCommand:command,onAhian:ahianToggle,onOpen:(x){Navigator.pop(c);open(x);})),transitionBuilder:(c,a,b,child)=>FadeTransition(opacity:a,child:ScaleTransition(scale:Tween<double>(begin:.94,end:1).animate(CurvedAnimation(parent:a,curve:Curves.easeOutCubic)),child:child)));
  void command(String raw){final s=raw.trim();if(s.isEmpty)return;final parts=s.split(' ');setState((){terminal.add('smth@desk  '+s);switch(parts.first.toLowerCase()){
- case'help':terminal.add('help  ls  date  whoami  uname  echo  open  ahian  clear');break;
+ case'help':terminal.add('Built-ins: help, ls, date, whoami, uname, echo, open, ahian, clear. Other commands run in the app user shell.');break;
  case'ls':terminal.add('Desktop/  Documents/  Downloads/  Pictures/  notes.smth');break;
  case'date':terminal.add(DateTime.now().toLocal().toString());break;
- case'whoami':terminal.add('smth-user / local preview session');break;
- case'uname':terminal.add('SMTH Desktop Preview / Flutter runtime');break;
+ case'whoami':terminal.add('smth-user / app sandbox');break;
+ case'uname':terminal.add(Platform.operatingSystem+' / SMTH launcher session');break;
  case'echo':terminal.add(s.length>5?s.substring(5):'');break;
- case'ahian':ahianToggle();terminal.add('AHIAN mode '+(ahian?'enabled':'disabled'));break;
+ case'ahian':ahian=!ahian;save('ahian',ahian);terminal.add('AHIAN mode '+(ahian?'enabled':'disabled'));break;
  case'clear':terminal.clear();break;
  case'open':if(parts.length>1){final target=parts[1].toLowerCase();final match=catalog.where((x)=>x.name.toLowerCase()==target);if(match.isNotEmpty){terminal.add('Opening '+match.first.name);Future.microtask(()=>open(match.first.name));}else{terminal.add('No app named '+parts[1]);}}else{terminal.add('Usage: open [app]');}break;
- default:terminal.add('Unknown command. Type help.');
+ default:terminal.add('Running in '+Platform.operatingSystem+' user shell…');Future.microtask(()=>runHostCommand(s));
  }if(terminal.length>100)terminal.removeRange(0,terminal.length-100);});}
+ Future<void> runHostCommand(String value)async{try{final result=await Process.run(Platform.isWindows?'cmd.exe':'sh',Platform.isWindows?['/c',value]:['-c',value]);final out=(result.stdout.toString()+'\n'+result.stderr.toString()).trim();if(mounted)setState(()=>terminal.add(out.isEmpty?'[exit '+result.exitCode.toString()+']':out));}catch(e){if(mounted)setState(()=>terminal.add('Command unavailable in this app sandbox: '+e.toString()));}}
  @override void dispose(){motion.dispose();super.dispose();}
  @override Widget build(BuildContext c)=>Scaffold(body:MouseRegion(cursor:pointerOn?SystemMouseCursors.none:SystemMouseCursors.basic,onHover:(e)=>setState(()=>pointer=e.localPosition),child:Listener(onPointerHover:(e)=>setState(()=>pointer=e.localPosition),onPointerDown:(e)=>setState(()=>pointer=e.localPosition),child:Stack(children:[
  Positioned.fill(child:AnimatedBuilder(animation:motion,builder:(c,_)=>CustomPaint(painter:Wallpaper(ahian,motion.value,contrast)))),
