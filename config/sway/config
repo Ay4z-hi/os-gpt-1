@@ -1,12 +1,12 @@
 # SMTH OS Wayland session starter
 set $mod Mod4
-font pango:Inter 10
+font pango:IBM Plex Sans 10
 floating_modifier $mod normal
 default_border pixel 2
 default_floating_border pixel 2
 gaps inner 8
 gaps outer 6
-client.focused #FF315A #121212 #FFFFFF #FF315A #FF315A
+client.focused #A56EFF #121212 #FFFFFF #FF315A #FF315A
 client.unfocused #303030 #000000 #A0A0A0 #303030 #303030
 exec waybar
 exec mako
