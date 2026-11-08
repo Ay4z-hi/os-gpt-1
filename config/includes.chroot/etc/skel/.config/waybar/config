@@ -1,41 +1,16 @@
 {
-  "layer": "top",
-  "position": "bottom",
-  "height": 48,
-  "spacing": 8,
-  "margin-left": 14,
-  "margin-right": 14,
-  "margin-bottom": 8,
-  "modules-left": ["custom/start", "sway/workspaces", "custom/ahian", "custom/store"],
-  "modules-center": ["sway/window"],
-  "modules-right": ["network", "pulseaudio", "bluetooth", "battery", "clock", "tray"],
-  "sway/workspaces": {
-    "format": "{name}",
-    "disable-scroll": true,
-    "all-outputs": true
-  },
-  "custom/start": {
-    "format": "SMTH",
-    "on-click": "wofi --show drun",
-    "tooltip": false
-  },
-  "custom/store": { "format": "APPS", "on-click": "smth-store", "tooltip": false },
-  "custom/ahian": {
-    "exec": "smth-ahian-status",
-    "return-type": "json",
-    "interval": 1,
-    "format": "{}",
-    "tooltip": false
-  },
-  "clock": {"format": "{:%H:%M  %a %d}", "tooltip": false},
-  "network": {
-    "format-wifi": "WIFI {signalStrength}%",
-    "format-ethernet": "ETH",
-    "format-disconnected": "OFFLINE",
-    "tooltip-format": "{ifname}: {ipaddr}"
-  },
-  "pulseaudio": {"format": "VOL {volume}%", "format-muted": "MUTE"},
-  "bluetooth": {"format": "BT {status}", "format-disabled": "BT OFF"},
-  "battery": {"format": "BAT {capacity}%"},
-  "tray": {"spacing": 8}
+  "layer":"top","position":"bottom","height":42,"spacing":5,
+  "margin-left":18,"margin-right":18,"margin-bottom":9,
+  "modules-left":["custom/start","sway/workspaces","custom/ahian","custom/store"],
+  "modules-center":["sway/window"],
+  "modules-right":["network","pulseaudio","bluetooth","battery","clock","tray"],
+  "sway/workspaces":{"format":"{name}","disable-scroll":true,"all-outputs":true},
+  "custom/start":{"format":"SMTH","on-click":"wofi --show drun","tooltip":false},
+  "custom/store":{"format":"▦","on-click":"smth-store","tooltip":false},
+  "custom/ahian":{"exec":"smth-ahian-status","return-type":"json","interval":1,"format":"{}","tooltip":false},
+  "clock":{"format":"{:%H:%M}","tooltip":false},
+  "network":{"format-wifi":"⌁ {signalStrength}%","format-ethernet":"ETH","format-disconnected":"OFFLINE","tooltip-format":"{ifname}: {ipaddr}"},
+  "pulseaudio":{"format":"VOL {volume}%","format-muted":"MUTE"},
+  "bluetooth":{"format":"BT {status}","format-disabled":"BT OFF"},
+  "battery":{"format":"BAT {capacity}%"},"tray":{"spacing":6}
 }
