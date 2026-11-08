@@ -12,7 +12,7 @@ menu=""
 while IFS='|' read -r title package command; do
   [ -n "$title" ] || continue
   if [ "$title" = "Screenshot Tool" ]; then
-    if command -v grim >/dev/null 2>&1 && command -v slurp >/dev/null 2>&1; then menu="${menu}OPEN  /  ${title}\\n"; else menu="${menu}INSTALL  /  ${title}\\n"; fi
+    if command -v grim >/dev/null 2>&1 && command -v slurp >/dev/null 2>&1; then menu="${menu}OPEN  /  ${title}\n"; else menu="${menu}INSTALL  /  ${title}\n"; fi
   elif command -v "$command" >/dev/null 2>&1; then
     menu="${menu}OPEN  /  ${title}\n"
   else
@@ -35,7 +35,14 @@ case "$title" in
   "Screenshot Tool") package="grim slurp"; command=smth-screenshot ;;
   *) notify-send "SMTH Store" "Unknown catalogue entry"; exit 2 ;;
 esac
-if ! command -v "$command" >/dev/null 2>&1; then
+need_install=0
+if [ "$package" = "grim slurp" ]; then
+  command -v grim >/dev/null 2>&1 || need_install=1
+  command -v slurp >/dev/null 2>&1 || need_install=1
+else
+  command -v "$command" >/dev/null 2>&1 || need_install=1
+fi
+if [ "$need_install" -eq 1 ]; then
   notify-send "SMTH Store" "Installing $title from Debian repositories…"
   if [ "$package" = "grim slurp" ]; then
     install_ok=1
