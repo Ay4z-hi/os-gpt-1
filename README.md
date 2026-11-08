@@ -13,6 +13,10 @@ A compact, original Linux desktop project built around a black-hole identity, a 
 
 ## Desktop foundation
 
+- Sway Wayland compositor with portrait-output detection and automatic 90° landscape rotation
+- Original orbital wallpaper, custom vector app icons, IBM Plex typography and a visible cursor
+- Functional SMTH App Store for optional Debian apps, plus hardware-backed Wi-Fi, Bluetooth and audio controls
+- Live Firefox browser, native shell terminal, animated AHian alternate mode and working wallpaper selection
 - Sway Wayland compositor
 - Waybar panel and Wofi start menu
 - Thunar file manager and Firefox ESR browser
