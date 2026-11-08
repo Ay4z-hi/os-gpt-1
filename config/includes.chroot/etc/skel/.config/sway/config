@@ -1,5 +1,5 @@
 set $mod Mod4
-font pango:IBM Plex Sans 10
+font pango:Inter 10
 floating_modifier $mod normal
 default_border pixel 2
 default_floating_border pixel 2
