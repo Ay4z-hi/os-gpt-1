@@ -18,7 +18,7 @@ Future<void> main() async{
  WidgetsFlutterBinding.ensureInitialized();
  try{await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);}catch(_){}
  try{await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);}catch(_){}
- try{await windowManager.ensureInitialized();const o=WindowOptions(size:Size(1280,800),center:true,title:'SMTH OS Preview',backgroundColor:ink);windowManager.waitUntilReadyToShow(o,()async{await windowManager.setMinimumSize(const Size(900,560));await windowManager.show();await windowManager.focus();});}catch(_){}
+ try{await windowManager.ensureInitialized();const o=WindowOptions(size:Size(960,600),center:true,title:'SMTH OS Preview',backgroundColor:ink);windowManager.waitUntilReadyToShow(o,()async{await windowManager.setMinimumSize(const Size(720,450));await windowManager.show();await windowManager.focus();});}catch(_){}
  runApp(const Smth());
 }
 class Smth extends StatelessWidget{const Smth({super.key});@override Widget build(BuildContext c)=>MaterialApp(debugShowCheckedModeBanner:false,title:'SMTH OS',theme:ThemeData(useMaterial3:true,brightness:Brightness.dark,fontFamily:'Arial',scaffoldBackgroundColor:ink,colorScheme:const ColorScheme.dark(primary:violet,secondary:lime,surface:panel)),home:const Desktop());}
