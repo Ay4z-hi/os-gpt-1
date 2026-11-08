@@ -26,6 +26,7 @@ gvfs
 gvfs-backends
 # Audio and notifications
 pipewire
+pipewire-bin
 pipewire-audio
 pipewire-pulse
 wireplumber
