@@ -16,7 +16,7 @@ const catalog=<AppInfo>[
 class AppInfo{final String name,desc,glyph;final bool core;const AppInfo(this.name,this.desc,this.glyph,this.core);}
 Future<void> main() async{
  WidgetsFlutterBinding.ensureInitialized();
- await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);
+ try{await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);}catch(_){}
  try{await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);}catch(_){}
  try{await windowManager.ensureInitialized();const o=WindowOptions(size:Size(1280,800),center:true,title:'SMTH OS Preview',backgroundColor:ink);windowManager.waitUntilReadyToShow(o,()async{await windowManager.setMinimumSize(const Size(900,560));await windowManager.show();await windowManager.focus();});}catch(_){}
  runApp(const Smth());
