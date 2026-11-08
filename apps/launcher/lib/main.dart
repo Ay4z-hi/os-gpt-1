@@ -194,5 +194,30 @@ class Glyph extends CustomPainter{final String glyph;final bool alt;Glyph(this.g
  case'READ':c.drawPath(Path()..moveTo(r.center.dx,r.top+7)..quadraticBezierTo(r.left,r.top-1,r.left+4,r.center.dy)..lineTo(r.left+4,r.bottom-7)..quadraticBezierTo(r.center.dx-4,r.bottom-14,r.center.dx,r.bottom-5)..quadraticBezierTo(r.center.dx+4,r.bottom-14,r.right-4,r.bottom-7)..lineTo(r.right-4,r.center.dy)..quadraticBezierTo(r.right,r.top-1,r.center.dx,r.top+7),p);break;
  default:c.drawCircle(r.center,r.width*.42,p);c.drawCircle(r.center,r.width*.2,fill);
  }}@override bool shouldRepaint(covariant Glyph o)=>o.glyph!=glyph||o.alt!=alt;}
-class Wallpaper extends CustomPainter{final bool ahian,contrast;final double phase;Wallpaper(this.ahian,this.phase,this.contrast);@override void paint(Canvas c,Size s){c.drawRect(Offset.zero& s,Paint()..color=ink);final center=Offset(s.width*.73,s.height*.46);final scale=math.min(s.width,s.height);final p=Paint()..style=PaintingStyle.stroke..strokeWidth=contrast?1.5:.9;for(int i=0;i<7;i++){final rad=scale*(.12+i*.052);p.color=i.isEven?violet:lime;c.drawOval(Rect.fromCenter(center:center.translate(math.sin(phase*math.pi*2+i)*5,math.cos(phase*math.pi*2+i)*4),width:rad*2.5,height:rad*.8),p);}c.drawCircle(center,scale*.105,Paint()..color=Colors.black);c.drawCircle(center,scale*.105,Paint()..style=PaintingStyle.stroke..strokeWidth=1.3..color=Colors.white.withOpacity(.8));final gap=contrast?25.0:19.0;for(double y=18;y<s.height;y+=gap){for(double x=18;x<s.width;x+=gap){final d=(Offset(x,y)-center).distance;if(d>scale*.18&&d<scale*.48){final pulse=.8+.4*math.sin(phase*math.pi*2+x*.01+y*.02);c.drawCircle(Offset(x,y),(contrast?2.0:1.4)*pulse,Paint()..color=(x.toInt()%3==0?violet:lime));}}}}@override bool shouldRepaint(covariant Wallpaper o)=>o.ahian!=ahian||o.phase!=phase||o.contrast!=contrast;}
+class Wallpaper extends CustomPainter{
+ final bool ahian,contrast;final double phase;Wallpaper(this.ahian,this.phase,this.contrast);
+ @override void paint(Canvas c,Size s){
+  c.drawRect(Offset.zero&s,Paint()..color=ink);
+  final rect=Offset.zero&s;
+  final glow=Paint()..shader=RadialGradient(colors:[(ahian?lime:violet).withOpacity(.13),ink.withOpacity(0)],stops:const [0,.9]).createShader(Rect.fromCircle(center:Offset(s.width*.72,s.height*.45),radius:s.width*.72));
+  c.drawRect(rect,glow);
+  final center=Offset(s.width*.70,s.height*.43);
+  for(int i=0;i<9;i++){
+   final y=s.height*(.12+i*.095)+math.sin(phase*math.pi*2+i*.55)*13;
+   final path=Path()..moveTo(-40,y+60)..cubicTo(s.width*.22,y-100+math.sin(phase*6+i)*18,s.width*.48,y+145,s.width*.72,y-35)..cubicTo(s.width*.86,y-125,s.width*.96,y+75,s.width+40,y-20);
+   final color=i%3==0?violet:i%3==1?lime:Colors.white;
+   c.drawPath(path,Paint()..style=PaintingStyle.stroke..strokeWidth=i%3==0?2.1:1.1..color=color.withOpacity(i%3==2?.12:.34)..maskFilter=MaskFilter.blur(BlurStyle.normal,i%3==0?1.8:0));
+  }
+  final ring=Paint()..style=PaintingStyle.stroke..strokeWidth=1.2;
+  for(int i=0;i<4;i++){ring.color=(i.isEven?violet:lime).withOpacity(.48);c.drawOval(Rect.fromCenter(center:center,width:120+i*27,height:72+i*17),ring);}
+  c.drawCircle(center,25,Paint()..color=Colors.black);
+  c.drawCircle(center,25,Paint()..style=PaintingStyle.stroke..strokeWidth=1..color=Colors.white.withOpacity(.5));
+ }
+ @override bool shouldRepaint(covariant Wallpaper o)=>o.ahian!=ahian||o.phase!=phase||o.contrast!=contrast;
+}
+class OrbitMark extends CustomPainter{
+ final bool alt;final double phase;OrbitMark(this.alt,this.phase);
+ @override void paint(Canvas c,Size s){final p=Paint()..style=PaintingStyle.stroke..strokeWidth=1.2;final center=Offset(s.width/2,s.height/2);for(int i=0;i<5;i++){p.color=(i.isEven?violet:lime).withOpacity(.4);c.drawOval(Rect.fromCenter(center:center,width:80+i*25,height:42+i*19),p);}c.drawCircle(center,19,Paint()..color=ink);c.drawCircle(center,19,Paint()..style=PaintingStyle.stroke..strokeWidth=1.4..color=Colors.white.withOpacity(.75));final dot=Offset(center.dx+math.cos(phase*math.pi*2)*68,center.dy+math.sin(phase*math.pi*2)*35);c.drawCircle(dot,3,Paint()..color=alt?lime:violet);}
+ @override bool shouldRepaint(covariant OrbitMark o)=>o.alt!=alt||o.phase!=phase;
+}
 class PointerShape extends CustomPainter{final bool alt;PointerShape(this.alt);@override void paint(Canvas c,Size s){final path=Path()..moveTo(2,1)..lineTo(2,27)..lineTo(9,21)..lineTo(14,33)..lineTo(19,30)..lineTo(14,18)..lineTo(25,18)..close();c.drawPath(path,Paint()..color=Colors.black..style=PaintingStyle.stroke..strokeWidth=3);c.drawPath(path,Paint()..color=(alt?lime:Colors.white)..style=PaintingStyle.fill);}@override bool shouldRepaint(covariant PointerShape o)=>o.alt!=alt;}
