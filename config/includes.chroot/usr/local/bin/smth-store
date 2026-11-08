@@ -12,16 +12,16 @@ menu=""
 while IFS='|' read -r title package command; do
   [ -n "$title" ] || continue
   if command -v "$command" >/dev/null 2>&1; then
-    menu="\${menu}OPEN  /  \${title}\n"
+    menu="${menu}OPEN  /  ${title}\n"
   else
-    menu="\${menu}INSTALL  /  \${title}\n"
+    menu="${menu}INSTALL  /  ${title}\n"
   fi
 done <<EOF
 $entries
 EOF
 choice=$(printf '%b' "$menu" | wofi --dmenu --prompt 'SMTH / APP MARKET' --width 560 --height 460)
 [ -n "$choice" ] || exit 0
-title=\${choice#* / }
+title=${choice#* / }
 case "$title" in
   "Text Editor") package=mousepad; command=mousepad ;;
   "Calculator") package=galculator; command=galculator ;;
