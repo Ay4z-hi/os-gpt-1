@@ -35,7 +35,7 @@ case "$title" in
 esac
 if ! command -v "$command" >/dev/null 2>&1; then
   notify-send "SMTH Store" "Installing $title from Debian repositories…"
-  if ! pkexec apt-get install -y "$package"; then
+  if ! pkexec sh -c 'apt-get update && apt-get install -y "$1"' sh "$package"; then
     notify-send "SMTH Store" "Install failed. Check your network and try again."
     exit 1
   fi
