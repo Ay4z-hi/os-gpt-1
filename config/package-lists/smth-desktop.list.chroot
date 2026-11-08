@@ -9,6 +9,7 @@ wofi
 foot
 xcursor-themes
 fonts-ibm-plex
+python3-minimal
 # Everyday apps
 thunar
 firefox-esr
