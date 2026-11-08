@@ -51,7 +51,6 @@ amd64-microcode
 greetd
 dbus-user-session
 polkitd
-pkexec
 policykit-1-gnome
 plymouth
 plymouth-themes
