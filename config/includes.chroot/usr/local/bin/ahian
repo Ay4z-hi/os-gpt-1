@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
-MODE="\${1:-toggle}"
-CONFIG="\${XDG_CONFIG_HOME:-$HOME/.config}"
+MODE="${1:-toggle}"
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
 SMTH_CONFIG="$CONFIG/smth"
 STATE="$SMTH_CONFIG/ahian.enabled"
 WALL_NORMAL=/usr/share/backgrounds/smth/smth-eclipse.svg
