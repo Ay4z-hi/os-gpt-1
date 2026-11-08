@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+command -v grim >/dev/null 2>&1 || { notify-send "SMTH Screenshot" "Install grim and slurp from SMTH Store first"; exit 1; }
+command -v slurp >/dev/null 2>&1 || { notify-send "SMTH Screenshot" "Install grim and slurp from SMTH Store first"; exit 1; }
+DIR="$HOME/Pictures/Screenshots"
+mkdir -p "$DIR"
+AREA=$(slurp) || exit 0
+[ -n "$AREA" ] || exit 0
+FILE="$DIR/SMTH-$(date +%Y%m%d-%H%M%S).png"
+grim -g "$AREA" "$FILE"
+notify-send "SMTH Screenshot" "Saved to $FILE"
