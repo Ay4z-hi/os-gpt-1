@@ -1,12 +1,16 @@
 # SMTH Launcher Preview
 
-A fake-but-polished SMTH desktop simulation, built with Flutter from one shared UI codebase.
+Landscape-first, animated SMTH desktop simulation sharing one Flutter UI across Android and Windows.
 
-- Android APK
-- Windows app package containing SMTH-Launcher.exe and runtime files
+- Android forces landscape orientation.
+- Windows opens in a wide desktop window.
+- Original orbital wallpaper, vector glyphs, animated dot field and visible custom pointer.
+- Browser opens real URLs in the device's default browser.
+- Terminal supports help, ls, date, whoami, uname, echo, open, ahian and clear.
+- Notes auto-save, Calculator evaluates basic arithmetic, Clock updates live.
+- Settings persist launcher preferences. Wi-Fi and Bluetooth are simulated toggles, not hardware controls.
+- Store installs/removes built-in launcher apps in the launcher profile.
 
-GitHub Actions workflow **Build SMTH launchers** builds both targets. Download artifacts from its workflow run.
+This is a simulation: it does not boot Linux or install packages into Android/Windows. The ISO has native hardware controls and an APT-powered app store.
 
-Includes Files, Browser mock screen, Terminal command simulator, Settings toggles, Store mock screen, notifications and AHian mode.
-
-**Important:** visual simulation only. It does not boot the Linux ISO, install an OS, or control real Wi-Fi/Bluetooth hardware. Browser and file contents are demo data.
+Builds are produced by GitHub Actions: **Build SMTH launchers**.
