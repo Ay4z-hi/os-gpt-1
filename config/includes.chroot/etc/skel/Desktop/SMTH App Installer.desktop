@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=SMTH App Installer
-Comment=Install applications
-Exec=smth-app-installer
+Name=SMTH App Store
+Comment=Install and launch lightweight apps
+Exec=smth-store
 Icon=smth-installer
 Terminal=false
