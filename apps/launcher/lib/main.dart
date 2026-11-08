@@ -36,11 +36,7 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  void open(String n){if(!installed.contains(n)){show('Store');return;}show(n);}
  void show(String n)=>showGeneralDialog(context:context,barrierDismissible:true,barrierLabel:n,barrierColor:Colors.black.withOpacity(.7),transitionDuration:const Duration(milliseconds:240),pageBuilder:(c,a,b)=>Center(child:AppWindow(name:n,ahian:ahian,installed:installed,wifi:wifi,bluetooth:bluetooth,quiet:quiet,contrast:contrast,pointerOn:pointerOn,note:note,terminal:terminal,onClose:()=>Navigator.pop(c),onToggle:(k,v){setState((){switch(k){case'wifi':wifi=v;break;case'bluetooth':bluetooth=v;break;case'quiet':quiet=v;break;case'contrast':contrast=v;break;case'pointer':pointerOn=v;break;}});save(k,v);},onInstall:(name,v){setState((){if(v){installed.add(name);}else{installed.remove(name);}});save('installed',installed.toList());},onNote:(v){note=v;save('note',v);},onCommand:command,onAhian:ahianToggle,onOpen:(x){Navigator.pop(c);open(x);})),transitionBuilder:(c,a,b,child)=>FadeTransition(opacity:a,child:ScaleTransition(scale:Tween<double>(begin:.94,end:1).animate(CurvedAnimation(parent:a,curve:Curves.easeOutCubic)),child:child)));
  void command(String raw){final s=raw.trim();if(s.isEmpty)return;final parts=s.split(' ');setState((){terminal.add('smth@desk  '+s);switch(parts.first.toLowerCase()){
- case'help':terminal.add('Built-ins: help, ls, date, whoami, uname, echo, open, ahian, clear. Other commands run in the app user shell.');break;
- case'ls':terminal.add('Desktop/  Documents/  Downloads/  Pictures/  notes.smth');break;
- case'date':terminal.add(DateTime.now().toLocal().toString());break;
- case'whoami':terminal.add('smth-user / app sandbox');break;
- case'uname':terminal.add(Platform.operatingSystem+' / SMTH launcher session');break;
+ case'help':terminal.add('Built-ins: help, echo, open, ahian, clear. Other commands run in the app user shell.');break;
  case'echo':terminal.add(s.length>5?s.substring(5):'');break;
  case'ahian':ahian=!ahian;save('ahian',ahian);terminal.add('AHIAN mode '+(ahian?'enabled':'disabled'));break;
  case'clear':terminal.clear();break;
