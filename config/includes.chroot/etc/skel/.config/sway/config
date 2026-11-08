@@ -3,9 +3,9 @@ font pango:Inter 10
 floating_modifier $mod normal
 default_border pixel 2
 default_floating_border pixel 2
-gaps inner 8
+gaps inner 10
 gaps outer 8
-# SMTH monochrome shell; the two accent colours are violet and lime.
+seat * xcursor_theme Adwaita 24
 client.focused #A56EFF #000000 #FFFFFF #C8F169 #A56EFF
 client.unfocused #FFFFFF #000000 #FFFFFF #FFFFFF #FFFFFF
 client.urgent #A56EFF #000000 #FFFFFF #A56EFF #A56EFF
@@ -16,18 +16,19 @@ exec blueman-applet
 exec /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 exec swayidle -w timeout 300 'swaylock -c 000000' timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
 exec smth-wallpaper
-# Keyboard shortcuts
+exec smth-orientation
 bindsym $mod+Return exec foot
 bindsym $mod+d exec wofi --show drun
 bindsym $mod+e exec thunar
 bindsym $mod+b exec firefox-esr --new-window
+bindsym $mod+Shift+s exec smth-store
+bindsym $mod+comma exec smth-settings
+bindsym $mod+Shift+a exec ahian
 bindsym $mod+Shift+q kill
 bindsym $mod+f fullscreen toggle
 bindsym $mod+space floating toggle
 bindsym $mod+Shift+l exec swaylock -c 000000
 bindsym $mod+Shift+e exec smth-session-exit
-bindsym $mod+comma exec smth-settings
-# Touchpad defaults; compositor adapts when a touchscreen is detected.
 input type:touchpad {
     tap enabled
     natural_scroll enabled
