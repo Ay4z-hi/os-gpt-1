@@ -10,7 +10,8 @@ chmod 0755 \
   /usr/local/bin/smth-ahian-status \
   /usr/local/bin/smth-store \
   /usr/local/bin/smth-orientation \
-  /usr/local/bin/ahian
+  /usr/local/bin/ahian \
+  /usr/local/bin/aian
 
 # Select SMTH's own boot splash and bake it into the live initramfs.
 if command -v plymouth-set-default-theme >/dev/null 2>&1; then
