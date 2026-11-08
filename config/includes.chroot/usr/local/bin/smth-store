@@ -46,10 +46,10 @@ if [ "$need_install" -eq 1 ]; then
   notify-send "SMTH Store" "Installing $title from Debian repositories…"
   if [ "$package" = "grim slurp" ]; then
     install_ok=1
-    pkexec sh -c 'apt-get update && apt-get install -y grim slurp' || install_ok=0
+    sudo sh -c 'apt-get update && apt-get install -y grim slurp' || install_ok=0
   else
     install_ok=1
-    pkexec sh -c 'apt-get update && apt-get install -y "$1"' sh "$package" || install_ok=0
+    sudo sh -c 'apt-get update && apt-get install -y "$1"' sh "$package" || install_ok=0
   fi
   if [ "$install_ok" -ne 1 ]; then
     notify-send "SMTH Store" "Install failed. Check your network and try again."
