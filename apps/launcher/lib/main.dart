@@ -47,7 +47,6 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  @override void dispose(){motion.dispose();super.dispose();}
  @override Widget build(BuildContext c)=>Scaffold(body:MouseRegion(cursor:pointerOn?SystemMouseCursors.none:SystemMouseCursors.basic,onHover:(e)=>setState(()=>pointer=e.localPosition),child:Listener(onPointerHover:(e)=>setState(()=>pointer=e.localPosition),onPointerDown:(e)=>setState(()=>pointer=e.localPosition),child:Stack(children:[
  Positioned.fill(child:AnimatedBuilder(animation:motion,builder:(c,_)=>CustomPaint(painter:Wallpaper(ahian,motion.value,contrast)))),
- Positioned.fill(child:ColoredBox(color:ink.withOpacity(.23))),
  SafeArea(child:Column(children:[top(),Expanded(child:workspace()),dock()])),
  if(menu)Positioned(left:16,bottom:76,child:startMenu()),
  if(notice&&!quiet)Positioned(right:18,top:58,child:notifications()),
@@ -150,7 +149,7 @@ class _AppWindowState extends State<AppWindow>{
 }
 class Brand extends StatelessWidget{final double size;const Brand({super.key,required this.size});@override Widget build(BuildContext c)=>CustomPaint(size:Size(size,size),painter:BrandPainter());}
 class BrandPainter extends CustomPainter{@override void paint(Canvas c,Size s){c.drawCircle(Offset(s.width/2,s.height/2),s.width*.32,Paint()..style=PaintingStyle.stroke..strokeWidth=1.7..color=violet);c.drawArc(Rect.fromCircle(center:Offset(s.width/2,s.height/2),radius:s.width*.47),-.7,2.8,false,Paint()..style=PaintingStyle.stroke..strokeWidth=2..color=lime);c.drawCircle(Offset(s.width*.52,s.height*.5),s.width*.12,Paint()..color=Colors.white);}@override bool shouldRepaint(covariant CustomPainter o)=>false;}
-class Glyph extends CustomPainter{final String glyph;final bool alt;Glyph(this.glyph,this.alt);@override void paint(Canvas c,Size s){final color=alt?lime:violet;final p=Paint()..style=PaintingStyle.stroke..strokeWidth=2.4..strokeCap=StrokeCap.round..strokeJoin=StrokeJoin.round..color=color;final fill=Paint()..color=color.withOpacity(.12);final r=Rect.fromCenter(center:Offset(s.width/2,s.height/2),width:s.width*.68,height:s.height*.68);switch(glyph){
+class Glyph extends CustomPainter{final String glyph;final bool alt;Glyph(this.glyph,this.alt);@override void paint(Canvas c,Size s){final color=alt?lime:violet;final p=Paint()..style=PaintingStyle.stroke..strokeWidth=2.4..strokeCap=StrokeCap.round..strokeJoin=StrokeJoin.round..color=color;final fill=Paint()..color=ink;final r=Rect.fromCenter(center:Offset(s.width/2,s.height/2),width:s.width*.68,height:s.height*.68);switch(glyph){
  case'FILE':c.drawRRect(RRect.fromRectAndRadius(r,const Radius.circular(5)),p);for(int i=0;i<3;i++)c.drawLine(Offset(r.left+7,r.top+12+i*8),Offset(r.right-7-(i==2?10:0),r.top+12+i*8),p);break;
  case'WEB':c.drawCircle(r.center,r.width*.48,p);c.drawOval(Rect.fromCenter(center:r.center,width:r.width*.35,height:r.height*.95),p);c.drawLine(Offset(r.left,r.center.dy),Offset(r.right,r.center.dy),p);break;
  case'TERM':c.drawPath(Path()..moveTo(r.left+7,r.top+12)..lineTo(r.left+20,r.center.dy)..lineTo(r.left+7,r.bottom-12),p);c.drawLine(Offset(r.left+25,r.bottom-12),Offset(r.right-6,r.bottom-12),p);break;
