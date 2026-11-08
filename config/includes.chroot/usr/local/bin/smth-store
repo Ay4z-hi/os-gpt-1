@@ -1,0 +1,47 @@
+#!/bin/sh
+set -eu
+entries='Text Editor|mousepad|mousepad
+Calculator|galculator|galculator
+Media Player|mpv|mpv
+Image Viewer|ristretto|ristretto
+PDF Reader|evince|evince
+Archive Manager|file-roller|file-roller
+System Monitor|xfce4-taskmanager|xfce4-taskmanager
+Screenshot Tool|grim|grim'
+menu=""
+while IFS='|' read -r title package command; do
+  [ -n "$title" ] || continue
+  if command -v "$command" >/dev/null 2>&1; then
+    menu="\${menu}OPEN  /  \${title}\n"
+  else
+    menu="\${menu}INSTALL  /  \${title}\n"
+  fi
+done <<EOF
+$entries
+EOF
+choice=$(printf '%b' "$menu" | wofi --dmenu --prompt 'SMTH / APP MARKET' --width 560 --height 460)
+[ -n "$choice" ] || exit 0
+title=\${choice#* / }
+case "$title" in
+  "Text Editor") package=mousepad; command=mousepad ;;
+  "Calculator") package=galculator; command=galculator ;;
+  "Media Player") package=mpv; command=mpv ;;
+  "Image Viewer") package=ristretto; command=ristretto ;;
+  "PDF Reader") package=evince; command=evince ;;
+  "Archive Manager") package=file-roller; command=file-roller ;;
+  "System Monitor") package=xfce4-taskmanager; command=xfce4-taskmanager ;;
+  "Screenshot Tool") package=grim; command=grim ;;
+  *) notify-send "SMTH Store" "Unknown catalogue entry"; exit 2 ;;
+esac
+if ! command -v "$command" >/dev/null 2>&1; then
+  notify-send "SMTH Store" "Installing $title from Debian repositories…"
+  if ! pkexec apt-get install -y "$package"; then
+    notify-send "SMTH Store" "Install failed. Check your network and try again."
+    exit 1
+  fi
+fi
+if command -v "$command" >/dev/null 2>&1; then
+  "$command" >/dev/null 2>&1 &
+else
+  notify-send "SMTH Store" "$title was installed; try again from the store."
+fi
