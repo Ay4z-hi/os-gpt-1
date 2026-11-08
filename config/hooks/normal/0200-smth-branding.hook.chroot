@@ -9,6 +9,7 @@ chmod 0755 \
   /usr/local/bin/smth-app-installer \
   /usr/local/bin/smth-ahian-status \
   /usr/local/bin/smth-store \
+  /usr/local/bin/smth-screenshot \
   /usr/local/bin/smth-orientation \
   /usr/local/bin/ahian \
   /usr/local/bin/aian
