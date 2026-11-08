@@ -8,6 +8,8 @@ chmod 0755 \
   /usr/local/bin/smth-settings \
   /usr/local/bin/smth-app-installer \
   /usr/local/bin/smth-ahian-status \
+  /usr/local/bin/smth-store \
+  /usr/local/bin/smth-orientation \
   /usr/local/bin/ahian
 
 # Select SMTH's own boot splash and bake it into the live initramfs.
