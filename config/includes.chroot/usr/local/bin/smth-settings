@@ -6,7 +6,7 @@ bt_state=$(bluetoothctl show 2>/dev/null | grep -q 'Powered: yes' && echo on || 
 [ "$bt_state" = on ] && bt_label="BLUETOOTH  /  ON" || bt_label="BLUETOOTH  /  OFF"
 mute_state=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null || true)
 case "$mute_state" in *MUTED*) audio_label="AUDIO  /  MUTED";; *) audio_label="AUDIO  /  ACTIVE";; esac
-choice=$(printf '%s\n' "DISPLAY & MONITORS" "$wifi_label" "$bt_label" "$audio_label" "WALLPAPER / APPEARANCE" "AHIAN / ALTERNATE DESKTOP" "APP STORE" "SESSION / POWER" | wofi --dmenu --prompt 'SMTH / CONTROL' --width 560 --height 420)
+choice=$(printf '%s\n' "DISPLAY & MONITORS" "$wifi_label" "$bt_label" "$audio_label" "SOUND MIXER" "WALLPAPER / APPEARANCE" "AHIAN / ALTERNATE DESKTOP" "APP STORE" "SESSION / POWER" | wofi --dmenu --prompt 'SMTH / CONTROL' --width 560 --height 420)
 case "$choice" in
   "DISPLAY & MONITORS") exec wdisplays ;;
   "WI-FI  /  ON") nmcli radio wifi off && notify-send "SMTH / NETWORK" "Wi-Fi disabled" ;;
@@ -15,6 +15,7 @@ case "$choice" in
   "BLUETOOTH  /  OFF") bluetoothctl power on && notify-send "SMTH / BLUETOOTH" "Bluetooth enabled" ;;
   "AUDIO  /  MUTED") wpctl set-mute @DEFAULT_AUDIO_SINK@ 0 ;;
   "AUDIO  /  ACTIVE") wpctl set-mute @DEFAULT_AUDIO_SINK@ 1 ;;
+  "SOUND MIXER") exec pavucontrol ;;
   "WALLPAPER / APPEARANCE") exec smth-wallpaper --choose ;;
   "AHIAN / ALTERNATE DESKTOP") exec ahian ;;
   "APP STORE") exec smth-store ;;
