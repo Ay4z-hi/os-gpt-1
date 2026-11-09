@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+APP=/opt/smth/launcher/smth_launcher
+if [ ! -x "$APP" ]; then
+  notify-send "SMTH Launcher" "The launcher bundle is missing. Rebuild the SMTH ISO."
+  exit 1
+fi
+exec "$APP" "$@"
