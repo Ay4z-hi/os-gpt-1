@@ -130,7 +130,7 @@ class _AppWindowState extends State<AppWindow>{
  const SizedBox(height:6),
  StreamBuilder<Duration>(stream:audio.onPositionChanged,initialData:Duration.zero,builder:(c,s){final pos=s.data??Duration.zero;return FutureBuilder<Duration?>(future:audio.getDuration(),builder:(c,d){final total=d.data??Duration.zero;final maxMs=math.max(1,total.inMilliseconds);return Row(children:[
   Text(_time(pos),style:const TextStyle(fontSize:8,color:muted)),
-  Expanded(child:Slider(dense:true,min:0,max:maxMs.toDouble(),value:pos.inMilliseconds.clamp(0,maxMs).toDouble(),onChanged:total==Duration.zero?null:(v)=>audio.seek(Duration(milliseconds:v.round())))),
+  Expanded(child:Slider(min:0,max:maxMs.toDouble(),value:pos.inMilliseconds.clamp(0,maxMs).toDouble(),onChanged:total==Duration.zero?null:(v)=>audio.seek(Duration(milliseconds:v.round())))),
   Text(_time(total),style:const TextStyle(fontSize:8,color:muted))
  ]);});}),
  const SizedBox(height:4),
