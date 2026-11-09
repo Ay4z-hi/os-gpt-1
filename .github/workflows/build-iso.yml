@@ -7,6 +7,7 @@ on:
     paths:
       - "auto/**"
       - "config/**"
+      - "apps/launcher/**"
       - "assets/boot/**"
       - "scripts/**"
       - ".github/workflows/build-iso.yml"
@@ -25,6 +26,27 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+
+      - name: Build the shared Flutter launcher for Linux
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Compile launcher for the ISO
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev
+          flutter create --platforms=linux --project-name smth_launcher --org dev.smth --empty /tmp/smth_linux
+          cp -R /tmp/smth_linux/linux apps/launcher/
+          cp /tmp/smth_linux/.metadata apps/launcher/.metadata
+          cd apps/launcher
+          flutter pub get
+          flutter analyze --no-fatal-infos --no-fatal-warnings
+          flutter build linux --release
+          cd ../..
+          mkdir -p config/includes.chroot/opt/smth/launcher
+          cp -R apps/launcher/build/linux/x64/release/bundle/. config/includes.chroot/opt/smth/launcher/
 
       - name: Build in Debian Bookworm
         run: |
