@@ -62,6 +62,7 @@ jobs:
               chmod +x auto/config scripts/*.sh
               chmod +x config/hooks/normal/*.hook.chroot
               chmod +x config/includes.chroot/usr/local/bin/*
+              chmod +x config/includes.chroot/opt/smth/launcher/smth_launcher
               ./auto/config
               ./scripts/prepare-bootloaders.sh
               lb build
