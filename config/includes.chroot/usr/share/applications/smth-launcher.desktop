@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=SMTH Launcher
+Comment=SMTH desktop launcher and AI Studio
+Exec=/usr/local/bin/smth-launcher
+Icon=applications-desktop
+Terminal=false
+Categories=Utility;Development;
