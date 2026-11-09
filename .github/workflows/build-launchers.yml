@@ -25,6 +25,13 @@ jobs:
           sed -i 's/compileSdk = flutter.compileSdkVersion/compileSdk = 36/' apps/launcher/android/app/build.gradle.kts
           cd apps/launcher
           flutter pub get
+          FILE_PICKER_GRADLE="$(find "$PUB_CACHE/hosted/pub.dev" -path '*/file_picker-*/android/build.gradle' -print -quit)"
+          if [ -z "$FILE_PICKER_GRADLE" ]; then
+            echo "Could not locate file_picker Android Gradle file"
+            exit 1
+          fi
+          echo "Raising file_picker compile SDK in $FILE_PICKER_GRADLE"
+          sed -i -E 's/compileSdkVersion[[:space:]]+34/compileSdkVersion 36/g; s/compileSdk[[:space:]]*=[[:space:]]*34/compileSdk = 36/g' "$FILE_PICKER_GRADLE"
           flutter analyze --no-fatal-infos --no-fatal-warnings
           flutter build apk --release
       - uses: actions/upload-artifact@v4
