@@ -31,7 +31,15 @@ jobs:
             exit 1
           fi
           echo "Raising file_picker compile SDK in $FILE_PICKER_GRADLE"
-          sed -i -E 's/compileSdkVersion[[:space:]]+34/compileSdkVersion 36/g; s/compileSdk[[:space:]]*=[[:space:]]*34/compileSdk = 36/g' "$FILE_PICKER_GRADLE"
+          echo "Before patch:"
+          grep -n -E 'compileSdk|compileSdkVersion' "$FILE_PICKER_GRADLE" || true
+          sed -i -E 's/(compileSdk(Version)?[[:space:]]*=?[[:space:]]*)34/\\136/g' "$FILE_PICKER_GRADLE"
+          echo "After patch:"
+          grep -n -E 'compileSdk|compileSdkVersion' "$FILE_PICKER_GRADLE" || true
+          if grep -Eq 'compileSdk(Version)?[[:space:]]*=?[[:space:]]*34' "$FILE_PICKER_GRADLE"; then
+            echo "file_picker compile SDK is still 34"
+            exit 1
+          fi
           flutter analyze --no-fatal-infos --no-fatal-warnings
           flutter build apk --release
       - uses: actions/upload-artifact@v4
