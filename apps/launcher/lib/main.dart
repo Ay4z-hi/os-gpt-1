@@ -206,7 +206,7 @@ class Wallpaper extends CustomPainter{
    final y=s.height*(.12+i*.095)+math.sin(phase*math.pi*2+i*.55)*13;
    final path=Path()..moveTo(-40,y+60)..cubicTo(s.width*.22,y-100+math.sin(phase*6+i)*18,s.width*.48,y+145,s.width*.72,y-35)..cubicTo(s.width*.86,y-125,s.width*.96,y+75,s.width+40,y-20);
    final color=i%3==0?violet:i%3==1?lime:Colors.white;
-   c.drawPath(path,Paint()..style=PaintingStyle.stroke..strokeWidth=(i%3==0?2.1:1.1)..color=color.withOpacity(i%3==2?.12:.34)..maskFilter=MaskFilter.blur(BlurStyle.normal,i%3==0?1.8:0));
+   c.drawPath(path,Paint()..style=PaintingStyle.stroke..strokeWidth=(i%3==0?2.1:1.1)..color=color.withOpacity(i % 3 == 2 ? 0.12 : 0.34)..maskFilter=MaskFilter.blur(BlurStyle.normal, i % 3 == 0 ? 1.8 : 0.0));
   }
   final ring=Paint()..style=PaintingStyle.stroke..strokeWidth=1.2;
   for(int i=0;i<4;i++){ring.color=(i.isEven?violet:lime).withOpacity(.48);c.drawOval(Rect.fromCenter(center:center,width:120+i*27,height:72+i*17),ring);}
