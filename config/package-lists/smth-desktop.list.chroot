@@ -12,6 +12,16 @@ python3-minimal
 # Everyday apps
 thunar
 firefox-esr
+mousepad
+galculator
+audacious
+mpv
+ristretto
+evince
+file-roller
+xfce4-taskmanager
+grim
+slurp
 # Hardware and system integration
 network-manager
 wpasupplicant
