@@ -2,6 +2,8 @@
 set -eu
 entries='Text Editor|mousepad|mousepad
 Calculator|galculator|galculator
+Music Player|audacious|audacious
+Video Player|mpv|mpv
 Media Player|mpv|mpv
 Image Viewer|ristretto|ristretto
 PDF Reader|evince|evince
@@ -27,6 +29,8 @@ title=${choice#* / }
 case "$title" in
   "Text Editor") package=mousepad; command=mousepad ;;
   "Calculator") package=galculator; command=galculator ;;
+  "Music Player") package=audacious; command=audacious ;;
+  "Video Player") package=mpv; command=mpv ;;
   "Media Player") package=mpv; command=mpv ;;
   "Image Viewer") package=ristretto; command=ristretto ;;
   "PDF Reader") package=evince; command=evince ;;
