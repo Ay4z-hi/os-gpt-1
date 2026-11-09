@@ -21,6 +21,12 @@ jobs:
           flutter create --platforms=android --project-name smth_launcher --org dev.smth --empty /tmp/smth_platform
           cp -R /tmp/smth_platform/android apps/launcher/
           cp /tmp/smth_platform/.metadata apps/launcher/.metadata
+          # Flutter's newest Android template can select AGP 9; retain the compatible legacy DSL for now.
+          if grep -q '^android.newDsl=' apps/launcher/android/gradle.properties; then
+            sed -i 's/^android.newDsl=.*/android.newDsl=false/' apps/launcher/android/gradle.properties
+          else
+            echo 'android.newDsl=false' >> apps/launcher/android/gradle.properties
+          fi
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-36" --sdk_root="$ANDROID_HOME" || true
           sed -i 's/compileSdk = flutter.compileSdkVersion/compileSdk = 36/' apps/launcher/android/app/build.gradle.kts
           cd apps/launcher
@@ -31,15 +37,31 @@ jobs:
             exit 1
           fi
           echo "Raising file_picker compile SDK in $FILE_PICKER_GRADLE"
-          echo "Before patch:"
-          grep -n -E 'compileSdk|compileSdkVersion' "$FILE_PICKER_GRADLE" || true
-          sed -i -E 's/(compileSdk(Version)?[[:space:]]*=?[[:space:]]*)34/\\136/g' "$FILE_PICKER_GRADLE"
-          echo "After patch:"
-          grep -n -E 'compileSdk|compileSdkVersion' "$FILE_PICKER_GRADLE" || true
-          if grep -Eq 'compileSdk(Version)?[[:space:]]*=?[[:space:]]*34' "$FILE_PICKER_GRADLE"; then
-            echo "file_picker compile SDK is still 34"
-            exit 1
-          fi
+          python3 - "$FILE_PICKER_GRADLE" <<'PY'
+          import re
+          import sys
+
+          path = sys.argv[1]
+          with open(path, encoding="utf-8") as source:
+              content = source.read()
+
+          pattern = r"(?m)^(\\s*compileSdk(?:Version)?\\s+)34(\\s*(?://.*)?$)"
+          updated, count = re.subn(pattern, r"\\g<1>36\\g<2>", content)
+          if count < 1:
+              print("Could not find a literal compileSdk 34 declaration:")
+              print("\\n".join(line for line in content.splitlines() if "compileSdk" in line))
+              raise SystemExit(1)
+
+          with open(path, "w", encoding="utf-8") as target:
+              target.write(updated)
+
+          print("Patched declarations:", count)
+          for line in updated.splitlines():
+              if "compileSdk" in line:
+                  print(line)
+          if re.search(r"(?m)^\\s*compileSdk(?:Version)?\\s+34\\b", updated):
+              raise SystemExit("file_picker compile SDK is still 34")
+          PY
           flutter analyze --no-fatal-infos --no-fatal-warnings
           flutter build apk --release
       - uses: actions/upload-artifact@v4
