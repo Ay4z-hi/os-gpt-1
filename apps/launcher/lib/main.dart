@@ -47,7 +47,7 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  @override void dispose(){motion.dispose();super.dispose();}
  @override Widget build(BuildContext c)=>Scaffold(body:MouseRegion(cursor:pointerOn?SystemMouseCursors.none:SystemMouseCursors.basic,onHover:(e)=>setState(()=>pointer=e.localPosition),child:Listener(onPointerHover:(e)=>setState(()=>pointer=e.localPosition),onPointerDown:(e)=>setState(()=>pointer=e.localPosition),child:Stack(children:[
  Positioned.fill(child:AnimatedBuilder(animation:motion,builder:(c,_)=>CustomPaint(painter:Wallpaper(ahian,motion.value,contrast)))),
- SafeArea(child:Column(children:[top(),Expanded(child:workspace()),dock()])),
+ SafeArea(child:AnimatedBuilder(animation:motion,builder:(context,child){final t=motion.value*math.pi*2;return Transform.translate(offset:ahian?Offset(math.sin(t)*2,math.cos(t*1.3)*1.5):Offset.zero,child:Transform.scale(scale:ahian?1+math.sin(t*2)*.002:1,child:child));},child:Column(children:[top(),Expanded(child:workspace()),dock()]))),
  if(menu)Positioned(left:16,bottom:76,child:startMenu()),
  if(notice&&!quiet)Positioned(right:18,top:58,child:notifications()),
  if(pointerOn)Positioned(left:pointer.dx,top:pointer.dy,child:IgnorePointer(child:CustomPaint(size:const Size(30,38),painter:PointerShape(ahian)))),
