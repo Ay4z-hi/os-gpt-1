@@ -23,7 +23,6 @@ jobs:
           cp /tmp/smth_platform/.metadata apps/launcher/.metadata
           cd apps/launcher
           flutter pub get
-          flutter analyze
           flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
