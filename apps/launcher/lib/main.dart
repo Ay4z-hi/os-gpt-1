@@ -218,7 +218,7 @@ class _AppWindowState extends State<AppWindow>{
  Future<void> sendAI()async{
   final key=aiKey.text.trim(),prompt=aiPrompt.text.trim();
   if(key.isEmpty||prompt.isEmpty){setState(()=>aiReply='Enter your Anthropic API key and a prompt first.');return;}
-  aiPrompt.clear();setState(()=>{aiBusy=true,aiHistory.add('YOU  /  '+prompt)});
+  aiPrompt.clear();setState((){aiBusy=true;aiHistory.add('YOU  /  '+prompt);});
   HttpClient? client;
   try{
    client=HttpClient();client.connectionTimeout=const Duration(seconds:25);
