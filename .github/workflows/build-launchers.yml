@@ -17,13 +17,13 @@ jobs:
       - name: Generate Android platform and build
         shell: bash
         run: |
+          set -euxo pipefail
+          flutter create --platforms=android --project-name smth_launcher --org dev.smth --empty /tmp/smth_platform
+          cp -R /tmp/smth_platform/android apps/launcher/
+          cp /tmp/smth_platform/.metadata apps/launcher/.metadata
           cd apps/launcher
-          cp lib/main.dart /tmp/smth_main.dart
-          cp pubspec.yaml /tmp/smth_pubspec.yaml
-          flutter create --platforms=android --project-name smth_launcher --org dev.smth --empty .
-          cp /tmp/smth_main.dart lib/main.dart
-          cp /tmp/smth_pubspec.yaml pubspec.yaml
           flutter pub get
+          flutter analyze
           flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
@@ -40,13 +40,13 @@ jobs:
       - name: Generate Windows platform and build
         shell: bash
         run: |
+          set -euxo pipefail
+          flutter create --platforms=windows --project-name smth_launcher --org dev.smth --empty /tmp/smth_platform
+          cp -R /tmp/smth_platform/windows apps/launcher/
+          cp /tmp/smth_platform/.metadata apps/launcher/.metadata
           cd apps/launcher
-          cp lib/main.dart /tmp/smth_main.dart
-          cp pubspec.yaml /tmp/smth_pubspec.yaml
-          flutter create --platforms=windows --project-name smth_launcher --org dev.smth --empty .
-          cp /tmp/smth_main.dart lib/main.dart
-          cp /tmp/smth_pubspec.yaml pubspec.yaml
           flutter pub get
+          flutter analyze
           flutter build windows --release
           mv build/windows/x64/runner/Release/smth_launcher.exe build/windows/x64/runner/Release/SMTH-Launcher.exe
       - name: Package Windows app
