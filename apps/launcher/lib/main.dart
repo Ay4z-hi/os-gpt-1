@@ -38,7 +38,7 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  void command(String raw){final s=raw.trim();if(s.isEmpty)return;final parts=s.split(' ');setState((){terminal.add('smth@desk  '+s);switch(parts.first.toLowerCase()){
  case'help':terminal.add('Built-ins: help, echo, open, ahian, clear. Other commands run in the app user shell.');break;
  case'echo':terminal.add(s.length>5?s.substring(5):'');break;
- case'ahian':ahian=!ahian;save('ahian',ahian);terminal.add('AHIAN mode '+(ahian?'enabled':'disabled'));break;
+ case'ahian':if(parts.length>1&&parts[1].toLowerCase()=='on'){ahian=true;}else if(parts.length>1&&parts[1].toLowerCase()=='off'){ahian=false;}else{ahian=!ahian;}save('ahian',ahian);terminal.add('AHIAN easter egg '+(ahian?'unlocked — all systems animated':'closed'));break;
  case'clear':terminal.clear();break;
  case'open':if(parts.length>1){final target=parts[1].toLowerCase();final match=catalog.where((x)=>x.name.toLowerCase()==target);if(match.isNotEmpty){terminal.add('Opening '+match.first.name);Future.microtask(()=>open(match.first.name));}else{terminal.add('No app named '+parts[1]);}}else{terminal.add('Usage: open [app]');}break;
  default:terminal.add('Running in '+Platform.operatingSystem+' user shell…');Future.microtask(()=>runHostCommand(s));
@@ -52,37 +52,30 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  if(notice&&!quiet)Positioned(right:18,top:58,child:notifications()),
  if(pointerOn)Positioned(left:pointer.dx,top:pointer.dy,child:IgnorePointer(child:CustomPaint(size:const Size(30,38),painter:PointerShape(ahian)))),
  ]))));
- Widget top()=>Padding(padding:const EdgeInsets.fromLTRB(18,10,18,2),child:Row(children:[
-  _pill(const Brand(size:17),()=>setState(()=>menu=!menu)),
-  const SizedBox(width:7),_pill(const Icon(Icons.apps_rounded,size:15),()=>setState(()=>menu=!menu)),
-  const Spacer(),
-  _pill(const Icon(Icons.search_rounded,size:15),()=>open('Store'),label:'Search'),
-  const SizedBox(width:6),
-  for(final item in [('Files',Icons.folder_open_rounded),('Browser',Icons.language_rounded),('Terminal',Icons.terminal_rounded),('Settings',Icons.tune_rounded),('Store',Icons.grid_view_rounded)])
-    Padding(padding:const EdgeInsets.only(left:5),child:_pill(Icon(item.$2,size:15),()=>open(item.$1))),
-  const Spacer(),
-  _pill(Row(mainAxisSize:MainAxisSize.min,children:[Icon(Icons.wifi,size:12,color:wifi?lime:muted),const SizedBox(width:7),Icon(Icons.volume_up_rounded,size:12,color:muted),const SizedBox(width:8),Text(TimeOfDay.now().format(context),style:const TextStyle(fontSize:10,fontWeight:FontWeight.w700))]),()=>setState(()=>notice=!notice))
- ]));
+ Widget top()=>const SizedBox(height:4);
  Widget _pill(Widget child,VoidCallback tap,{String? label})=>Material(color:ink.withOpacity(.88),borderRadius:BorderRadius.circular(30),child:InkWell(onTap:tap,borderRadius:BorderRadius.circular(30),child:Container(height:34,padding:EdgeInsets.symmetric(horizontal:label==null?11:14),decoration:BoxDecoration(border:Border.all(color:Colors.white.withOpacity(.14)),borderRadius:BorderRadius.circular(30)),child:Row(mainAxisSize:MainAxisSize.min,children:[child,if(label!=null)Padding(padding:const EdgeInsets.only(left:8),child:Text(label,style:const TextStyle(fontSize:10,color:Colors.white70)))]))));
  Widget status(IconData i,String t)=>Row(children:[Icon(i,color:muted,size:14),const SizedBox(width:5),Text(t,style:const TextStyle(color:muted,fontSize:9,letterSpacing:1))]);
- Widget workspace(){final w=MediaQuery.sizeOf(context).width;return Padding(padding:const EdgeInsets.fromLTRB(30,12,30,4),child:Stack(children:[
-  Positioned(left:0,bottom:8,child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-    Text(ahian?'AHIAN / FIELD MODE':'SMTH / DESKTOP',style:TextStyle(color:ahian?lime:violet,fontSize:9,letterSpacing:2.8,fontWeight:FontWeight.w800)),
-    const SizedBox(height:9),
-    Text(TimeOfDay.now().format(context),style:const TextStyle(fontSize:42,fontWeight:FontWeight.w300,letterSpacing:-2)),
-    const SizedBox(height:3),Text(DateTime.now().toLocal().toString().split(' ').first,style:const TextStyle(fontSize:10,color:muted,letterSpacing:1)),
-    const SizedBox(height:22),
-    Row(children:[_desktopShortcut('FILES',Icons.folder_open_rounded,()=>open('Files')),_desktopShortcut('WEB',Icons.language_rounded,()=>open('Browser')),_desktopShortcut('NOTES',Icons.sticky_note_2_outlined,()=>open('Notes')),_desktopShortcut('STORE',Icons.grid_view_rounded,()=>open('Store'))])
+ Widget workspace(){final size=MediaQuery.sizeOf(context);return Padding(padding:const EdgeInsets.fromLTRB(42,8,38,8),child:Stack(children:[
+  Positioned(left:0,bottom:34,child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+    Text(TimeOfDay.now().format(context),style:const TextStyle(fontSize:54,fontWeight:FontWeight.w300,letterSpacing:-3,color:Colors.white)),
+    const SizedBox(height:8),
+    Row(crossAxisAlignment:CrossAxisAlignment.center,children:[Text('SMTH',style:TextStyle(fontSize:55,fontWeight:FontWeight.w900,letterSpacing:-4,color:Colors.white,shadows:[Shadow(color:Colors.white.withOpacity(.22),blurRadius:12)])),const SizedBox(width:12),Container(width:3,height:42,color:violet),const SizedBox(width:10),const Text('SYSTEM / 01',style:TextStyle(fontSize:9,letterSpacing:2.5,color:Colors.white70))]),
+    const SizedBox(height:8),Text(DateTime.now().toLocal().toString().split(' ').first.toUpperCase(),style:const TextStyle(fontSize:9,color:Colors.white60,letterSpacing:2))
   ])),
-  Positioned(right:0,top:10,child:Container(width:190,padding:const EdgeInsets.all(14),decoration:BoxDecoration(color:ink.withOpacity(.78),border:Border.all(color:Colors.white.withOpacity(.12)),borderRadius:BorderRadius.circular(18)),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-    const Text('SYSTEM STATUS',style:TextStyle(color:muted,fontSize:8,letterSpacing:2)),
-    const SizedBox(height:10),_statusLine(Icons.wifi,'NETWORK',wifi?'CONNECTED':'OFFLINE',wifi),
-    _statusLine(Icons.bluetooth,'BLUETOOTH',bluetooth?'ACTIVE':'OFF',bluetooth),
-    _statusLine(Icons.battery_full,'POWER','PREVIEW',true),
-    const SizedBox(height:8),GestureDetector(onTap:ahianToggle,child:Container(padding:const EdgeInsets.symmetric(vertical:9,horizontal:10),decoration:BoxDecoration(color:ahian?lime.withOpacity(.13):violet.withOpacity(.12),borderRadius:BorderRadius.circular(10)),child:Row(children:[Icon(Icons.bolt,size:14,color:ahian?lime:violet),const SizedBox(width:8),const Expanded(child:Text('AHIAN MODE',style:TextStyle(fontSize:9,fontWeight:FontWeight.w800,letterSpacing:1))),Text(ahian?'ON':'OFF',style:TextStyle(fontSize:8,color:ahian?lime:violet))])))
-  ]))),
-  Positioned(left:w*.35,top:MediaQuery.sizeOf(context).height*.12,child:IgnorePointer(child:CustomPaint(size:const Size(220,220),painter:OrbitMark(ahian,motion.value))))
+  Positioned(right:0,top:4,bottom:4,width:math.min(280.0,size.width*.30),child:AnimatedBuilder(animation:motion,builder:(context,_){
+    final pulse=.5+.5*math.sin(motion.value*math.pi*2);
+    return Column(children:[
+      _metalWidget(child:Row(children:[const Icon(Icons.waves,size:17,color:Colors.white70),const SizedBox(width:12),const Text('28°C',style:TextStyle(fontSize:14,fontWeight:FontWeight.w700)),const Spacer(),Text(TimeOfDay.now().format(context),style:const TextStyle(fontSize:21,fontWeight:FontWeight.w800))])),
+      const SizedBox(height:10),
+      _metalWidget(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children:[const Text('09 NOV',style:TextStyle(fontSize:9,color:muted)),const Text('CALENDAR',style:TextStyle(fontSize:9,color:muted,letterSpacing:1.5)),const Text('2026',style:TextStyle(fontSize:9,color:muted))]),const SizedBox(height:10),GridView.count(shrinkWrap:true,physics:const NeverScrollableScrollPhysics(),crossAxisCount:7,mainAxisSpacing:5,crossAxisSpacing:5,childAspectRatio:1,children:List.generate(28,(i)=>Container(decoration:BoxDecoration(color:i==8?lime:Colors.white.withOpacity(.78),shape:BoxShape.circle))))])),
+      const SizedBox(height:10),
+      Row(children:[Expanded(child:_metalWidget(child:Row(children:[Icon(Icons.brightness_2_outlined,size:25,color:Colors.white.withOpacity(.8)),const SizedBox(width:9),const Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('48%',style:TextStyle(fontSize:15,fontWeight:FontWeight.bold)),Text('HUMIDITY',style:TextStyle(fontSize:8,color:muted))])]))),const SizedBox(width:9),Container(width:84,height:84,decoration:BoxDecoration(color:ink.withOpacity(.82),shape:BoxShape.circle,border:Border.all(color:Colors.white.withOpacity(.35),width:1.4),boxShadow:[BoxShadow(color:violet.withOpacity(.12+pulse*.12),blurRadius:18)]),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[const Text('NEXT',style:TextStyle(fontSize:8,color:muted)),Text('09',style:TextStyle(fontSize:32,fontWeight:FontWeight.w800,color:ahian?lime:Colors.white)),const Text('NOVEMBER',style:TextStyle(fontSize:7,color:muted))]))]),
+      const SizedBox(height:10),
+      Row(children:[Expanded(child:Container(height:82,padding:const EdgeInsets.all(11),decoration:BoxDecoration(color:ink.withOpacity(.84),borderRadius:BorderRadius.circular(13),border:Border.all(color:Colors.white.withOpacity(.18))),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(children:[const Icon(Icons.notifications_none,size:13,color:lime),const SizedBox(width:6),const Text('REMINDERS',style:TextStyle(fontSize:8,letterSpacing:1.2))]),const Spacer(),const Text('Your space is ready.\\nMake something good.',style:TextStyle(fontSize:10,color:Colors.white70,height:1.4))]))),const SizedBox(width:9),Container(width:90,height:82,decoration:BoxDecoration(color:ink.withOpacity(.84),borderRadius:BorderRadius.circular(30),border:Border.all(color:Colors.white.withOpacity(.2))),child:const Icon(Icons.music_note_rounded,size:27,color:Colors.white70))])
+    ]);
+  }))
  ]));}
+ Widget _metalWidget({required Widget child})=>Container(width:double.infinity,padding:const EdgeInsets.all(13),decoration:BoxDecoration(color:ink.withOpacity(.82),borderRadius:BorderRadius.circular(15),border:Border.all(color:Colors.white.withOpacity(.2)),boxShadow:[BoxShadow(color:Colors.black.withOpacity(.24),blurRadius:12,offset:const Offset(0,4))]),child:child);
  Widget _desktopShortcut(String label,IconData icon,VoidCallback tap)=>Padding(padding:const EdgeInsets.only(right:18),child:InkWell(onTap:tap,borderRadius:BorderRadius.circular(12),child:Column(children:[Container(width:38,height:38,decoration:BoxDecoration(color:ink.withOpacity(.86),shape:BoxShape.circle,border:Border.all(color:Colors.white.withOpacity(.16))),child:Icon(icon,size:16,color:label=='STORE'?lime:Colors.white)),const SizedBox(height:5),Text(label,style:const TextStyle(fontSize:8,color:muted,letterSpacing:1))])));
  Widget _statusLine(IconData icon,String title,String value,bool active)=>Padding(padding:const EdgeInsets.only(bottom:9),child:Row(children:[Icon(icon,size:13,color:active?lime:muted),const SizedBox(width:8),Expanded(child:Text(title,style:const TextStyle(fontSize:8,color:muted,letterSpacing:1))),Text(value,style:TextStyle(fontSize:8,color:active?Colors.white:muted))]));
  Widget iconTile(AppInfo a)=>MouseRegion(cursor:SystemMouseCursors.click,child:GestureDetector(onTap:()=>open(a.name),child:AnimatedContainer(duration:const Duration(milliseconds:220),padding:const EdgeInsets.all(7),decoration:BoxDecoration(color:Colors.white.withOpacity(.025),border:Border.all(color:Colors.white.withOpacity(.08)),borderRadius:BorderRadius.circular(12)),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[Expanded(child:CustomPaint(painter:Glyph(a.glyph,ahian),size:const Size(64,48))),const SizedBox(height:5),Text(a.name,style:const TextStyle(fontSize:10,fontWeight:FontWeight.w700)),Text(a.desc,style:const TextStyle(fontSize:8,color:muted),maxLines:1,overflow:TextOverflow.ellipsis)]))));
@@ -120,7 +113,7 @@ class _AppWindowState extends State<AppWindow>{
 ]);
  case'Browser':return Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(children:[Expanded(child:TextField(controller:address,style:const TextStyle(fontSize:12),decoration:const InputDecoration(prefixIcon:Icon(Icons.public,color:lime),hintText:'Website or search',filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none,borderRadius:BorderRadius.all(Radius.circular(8)))))),const SizedBox(width:8),FilledButton(onPressed:browse,child:const Text('GO'))]),const SizedBox(height:16),Text(browserMsg,style:const TextStyle(color:muted,fontSize:12)),const SizedBox(height:14),Wrap(spacing:8,children:[for(final x in ['https://www.wikipedia.org','https://www.youtube.com','https://github.com'])ActionChip(label:Text(Uri.parse(x).host),onPressed:(){address.text=x;browse();})]),const Spacer(),const Text('Opens real pages in your device browser to keep SMTH lightweight.',style:TextStyle(color:muted,fontSize:10))]);
  case'Terminal':return Column(children:[Expanded(child:Container(width:double.infinity,padding:const EdgeInsets.all(14),decoration:BoxDecoration(color:ink,borderRadius:BorderRadius.circular(8)),child:ListView(children:[for(final l in widget.terminal)Padding(padding:const EdgeInsets.only(bottom:7),child:Text(l,style:const TextStyle(fontFamily:'monospace',fontSize:11,color:lime)))]))),const SizedBox(height:8),Row(children:[const Text('smth \$ ',style:TextStyle(color:violet,fontFamily:'monospace')),Expanded(child:TextField(controller:command,style:const TextStyle(fontFamily:'monospace',fontSize:12),decoration:const InputDecoration(hintText:'type help',isDense:true),onSubmitted:(v){widget.onCommand(v);command.clear();setState((){});})),IconButton(onPressed:(){widget.onCommand(command.text);command.clear();setState((){});},icon:const Icon(Icons.arrow_forward,color:lime))])]);
- case'Settings':return ListView(children:[const Text('PERSONALISE YOUR SPACE',style:TextStyle(color:lime,fontSize:9,letterSpacing:2)),const SizedBox(height:10),switchRow('Wi-Fi preview','Saved launcher network state',_wifi,(v){setState(()=>_wifi=v);widget.onToggle('wifi',v);},Icons.wifi),switchRow('Bluetooth preview','Saved launcher device state',_bluetooth,(v){setState(()=>_bluetooth=v);widget.onToggle('bluetooth',v);},Icons.bluetooth),switchRow('Quiet mode','Reduce notification visuals',_quiet,(v){setState(()=>_quiet=v);widget.onToggle('quiet',v);},Icons.notifications_off),switchRow('High contrast','Sharper panel outlines',_contrast,(v){setState(()=>_contrast=v);widget.onToggle('contrast',v);},Icons.contrast),switchRow('Desktop pointer','Show custom cursor',_pointerOn,(v){setState(()=>_pointerOn=v);widget.onToggle('pointer',v);},Icons.mouse),const Divider(color:Colors.white12),ListTile(leading:const Icon(Icons.bolt,color:violet),title:const Text('AHIAN alternate desktop'),subtitle:const Text('Switch wallpaper motion and accent emphasis'),trailing:Switch(value:_ahian,onChanged:(_){setState(()=>_ahian=!_ahian);widget.onAhian();},activeColor:lime)),const ListTile(leading:Icon(Icons.screen_rotation,color:violet),title:Text('Display orientation'),subtitle:Text('Landscape locked on Android'))]);
+ case'Settings':return ListView(children:[const Text('PERSONALISE YOUR SPACE',style:TextStyle(color:lime,fontSize:9,letterSpacing:2)),const SizedBox(height:10),switchRow('Wi-Fi preview','Saved launcher network state',_wifi,(v){setState(()=>_wifi=v);widget.onToggle('wifi',v);},Icons.wifi),switchRow('Bluetooth preview','Saved launcher device state',_bluetooth,(v){setState(()=>_bluetooth=v);widget.onToggle('bluetooth',v);},Icons.bluetooth),switchRow('Quiet mode','Reduce notification visuals',_quiet,(v){setState(()=>_quiet=v);widget.onToggle('quiet',v);},Icons.notifications_off),switchRow('High contrast','Sharper panel outlines',_contrast,(v){setState(()=>_contrast=v);widget.onToggle('contrast',v);},Icons.contrast),switchRow('Desktop pointer','Show custom cursor',_pointerOn,(v){setState(()=>_pointerOn=v);widget.onToggle('pointer',v);},Icons.mouse),const Divider(color:Colors.white12),const ListTile(leading:Icon(Icons.screen_rotation,color:violet),title:Text('Display orientation'),subtitle:Text('Landscape locked on Android'))]);
  case'Store':
  return Column(
   crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,21 +190,12 @@ class Glyph extends CustomPainter{final String glyph;final bool alt;Glyph(this.g
 class Wallpaper extends CustomPainter{
  final bool ahian,contrast;final double phase;Wallpaper(this.ahian,this.phase,this.contrast);
  @override void paint(Canvas c,Size s){
-  c.drawRect(Offset.zero&s,Paint()..color=ink);
-  final rect=Offset.zero&s;
-  final glow=Paint()..shader=RadialGradient(colors:[(ahian?lime:violet).withOpacity(.13),ink.withOpacity(0)],stops:const [0,.9]).createShader(Rect.fromCircle(center:Offset(s.width*.72,s.height*.45),radius:s.width*.72));
-  c.drawRect(rect,glow);
-  final center=Offset(s.width*.70,s.height*.43);
-  for(int i=0;i<9;i++){
-   final y=s.height*(.12+i*.095)+math.sin(phase*math.pi*2+i*.55)*13;
-   final path=Path()..moveTo(-40,y+60)..cubicTo(s.width*.22,y-100+math.sin(phase*6+i)*18,s.width*.48,y+145,s.width*.72,y-35)..cubicTo(s.width*.86,y-125,s.width*.96,y+75,s.width+40,y-20);
-   final color=i%3==0?violet:i%3==1?lime:Colors.white;
-   c.drawPath(path,Paint()..style=PaintingStyle.stroke..strokeWidth=(i%3==0?2.1:1.1)..color=color.withOpacity(i % 3 == 2 ? 0.12 : 0.34)..maskFilter=MaskFilter.blur(BlurStyle.normal, i % 3 == 0 ? 1.8 : 0.0));
-  }
-  final ring=Paint()..style=PaintingStyle.stroke..strokeWidth=1.2;
-  for(int i=0;i<4;i++){ring.color=(i.isEven?violet:lime).withOpacity(.48);c.drawOval(Rect.fromCenter(center:center,width:120+i*27,height:72+i*17),ring);}
-  c.drawCircle(center,25,Paint()..color=Colors.black);
-  c.drawCircle(center,25,Paint()..style=PaintingStyle.stroke..strokeWidth=1..color=Colors.white.withOpacity(.5));
+  final rect=Offset.zero&s;c.drawRect(rect,Paint()..color=const Color(0xFF252529));
+  final base=Paint()..shader=const LinearGradient(begin:Alignment.topLeft,end:Alignment.bottomRight,colors:[Color(0xFF08080B),Color(0xFF77777A),Color(0xFF17171A),Color(0xFF8A8A8D),Color(0xFF101014)],stops:[0,.22,.48,.73,1]).createShader(rect);c.drawRect(rect,base);
+  final band=Paint()..style=PaintingStyle.stroke..strokeWidth=5;
+  for(int i=0;i<30;i++){final y=i*s.height/29;final shimmer=math.sin(phase*math.pi*2+i*.42);band.shader=LinearGradient(begin:Alignment.centerLeft,end:Alignment.centerRight,colors:[Colors.black.withOpacity(.9),Colors.white.withOpacity(.28+shimmer.abs()*.12),Colors.black.withOpacity(.78),Colors.white.withOpacity(.2+shimmer.abs()*.12),Colors.black.withOpacity(.9)]).createShader(Rect.fromLTWH(0,y,s.width,5));c.drawLine(Offset(0,y+math.sin(phase*6+i*.3)*(ahian?5:1)),Offset(s.width,y),band);}
+  final sheen=Paint()..shader=RadialGradient(center:Alignment(-.45+phase*.15,-.3),radius:1.1,colors:[Colors.white.withOpacity(.34),Colors.white.withOpacity(.04),Colors.transparent],stops:const [0,.25,1]).createShader(rect);c.drawRect(rect,sheen);
+  if(ahian){final accent=Paint()..style=PaintingStyle.stroke..strokeWidth=1.4..color=(phase<.5?lime:violet).withOpacity(.8);for(int i=0;i<12;i++){final x=(i/12*s.width+phase*s.width*.18)%s.width;c.drawLine(Offset(x,0),Offset(x-s.height*.22,s.height),accent);}final pulse=.5+.5*math.sin(phase*math.pi*2);c.drawCircle(Offset(s.width*.5,s.height*.48),40+pulse*12,Paint()..color=lime.withOpacity(.035+pulse*.045));}
  }
  @override bool shouldRepaint(covariant Wallpaper o)=>o.ahian!=ahian||o.phase!=phase||o.contrast!=contrast;
 }
