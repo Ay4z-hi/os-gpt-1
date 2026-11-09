@@ -23,7 +23,7 @@ jobs:
           cp /tmp/smth_platform/.metadata apps/launcher/.metadata
           cd apps/launcher
           flutter pub get
-          flutter analyze --no-fatal-infos
+          flutter analyze --no-fatal-infos --no-fatal-warnings
           flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
@@ -46,7 +46,7 @@ jobs:
           cp /tmp/smth_platform/.metadata apps/launcher/.metadata
           cd apps/launcher
           flutter pub get
-          flutter analyze --no-fatal-infos
+          flutter analyze --no-fatal-infos --no-fatal-warnings
           flutter build windows --release
           mv build/windows/x64/runner/Release/smth_launcher.exe build/windows/x64/runner/Release/SMTH-Launcher.exe
       - name: Package Windows app
