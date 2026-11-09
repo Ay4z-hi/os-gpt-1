@@ -37,7 +37,7 @@ jobs:
             exit 1
           fi
           echo "Raising file_picker compile SDK in $FILE_PICKER_GRADLE"
-          python3 - "$FILE_PICKER_GRADLE" <<'PY'
+                    python3 - "$FILE_PICKER_GRADLE" <<'PY'
           import re
           import sys
 
@@ -45,11 +45,11 @@ jobs:
           with open(path, encoding="utf-8") as source:
               content = source.read()
 
-          pattern = r"(?m)^(\\s*compileSdk(?:Version)?\\s+)34(\\s*(?://.*)?$)"
-          updated, count = re.subn(pattern, r"\\g<1>36\\g<2>", content)
+          pattern = r"(?m)^(\s*compileSdk(?:Version)?\s+)34(\s*(?://.*)?$)"
+          updated, count = re.subn(pattern, r"\g<1>36\g<2>", content)
           if count < 1:
               print("Could not find a literal compileSdk 34 declaration:")
-              print("\\n".join(line for line in content.splitlines() if "compileSdk" in line))
+              print("\n".join(line for line in content.splitlines() if "compileSdk" in line))
               raise SystemExit(1)
 
           with open(path, "w", encoding="utf-8") as target:
@@ -59,7 +59,7 @@ jobs:
           for line in updated.splitlines():
               if "compileSdk" in line:
                   print(line)
-          if re.search(r"(?m)^\\s*compileSdk(?:Version)?\\s+34\\b", updated):
+          if re.search(r"(?m)^\s*compileSdk(?:Version)?\s+34\b", updated):
               raise SystemExit("file_picker compile SDK is still 34")
           PY
           flutter analyze --no-fatal-infos --no-fatal-warnings
