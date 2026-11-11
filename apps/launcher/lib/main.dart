@@ -274,7 +274,7 @@ class _AppWindowState extends State<AppWindow>{
    if(response.statusCode<200||response.statusCode>=300)throw Exception(data['error']?['message']??data['message']??'API request failed (HTTP ${response.statusCode})');
    String answer='';
    if(aiProvider=='Anthropic'){answer=((data['content'] as List? ?? []).where((x)=>x['type']=='text').map((x)=>x['text'].toString()).join('\\n'));}
-   else if(aiProvider=='Google Gemini'){answer=(((data['candidates'] as List?)?.firstOrNull?['content']?['parts'] as List? ?? []).map((x)=>x['text']??'').join('\\n')).toString();}
+   else if(aiProvider=='Google Gemini'){final candidates=data['candidates'] as List? ?? [];final parts=candidates.isEmpty?const []:(candidates.first['content']?['parts'] as List? ?? []);answer=parts.map((x)=>x['text']??'').join('\\n');}
    else{answer=(data['choices'] as List).first['message']['content'].toString();}
    if(mounted)setState(()=>aiReply=answer.isEmpty?'The API returned no text.':answer);
   }catch(e){if(mounted)setState(()=>aiReply='Request failed: ${e.toString()}');}
