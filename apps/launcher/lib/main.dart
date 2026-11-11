@@ -88,10 +88,10 @@ class AppWindow extends StatefulWidget{
  @override State<AppWindow> createState()=>_AppWindowState();
 }
 class _AppWindowState extends State<AppWindow>{
- late final TextEditingController address=TextEditingController(text:'https://www.google.com'),note=TextEditingController(text:widget.note),command=TextEditingController(),calc=TextEditingController(),aiKey=TextEditingController(),aiPrompt=TextEditingController();String browserMsg='Your window to the live web.',result='',aiReply='Add your API key to start. Keys stay in memory for this session.';bool aiBusy=false;final List<String> aiHistory=[];
+ late final TextEditingController address=TextEditingController(text:'https://www.google.com'),note=TextEditingController(text:widget.note),command=TextEditingController(),calc=TextEditingController(),aiKey=TextEditingController(),aiPrompt=TextEditingController(),aiEndpoint=TextEditingController(text:'https://api.openai.com/v1/chat/completions'),aiModel=TextEditingController(text:'gpt-4o-mini');String aiProvider='OpenAI-compatible';String browserMsg='Your window to the live web.',result='',aiReply='Choose an API provider, add its key and model, then send a prompt.';bool aiBusy=false;final List<String> aiHistory=[];
  late bool _wifi,_bluetooth,_quiet,_contrast,_pointerOn,_ahian;Offset _dragOffset=Offset.zero;int _clockTab=0;final Stopwatch _stopwatch=Stopwatch();Directory? _root;List<FileSystemEntity> _items=[];final AudioPlayer audio=AudioPlayer();final List<PlatformFile> tracks=[];final List<PlatformFile> videos=[];bool playing=false;String currentTrack='';String _wallpaper='metal';
  @override void initState(){super.initState();_wifi=widget.wifi;_bluetooth=widget.bluetooth;_quiet=widget.quiet;_contrast=widget.contrast;_pointerOn=widget.pointerOn;_wallpaper=widget.wallpaper;_ahian=widget.ahian;if(widget.name=='Files')loadFiles();}
- @override void dispose(){address.dispose();note.dispose();command.dispose();calc.dispose();aiKey.dispose();aiPrompt.dispose();audio.dispose();super.dispose();}
+ @override void dispose(){address.dispose();note.dispose();command.dispose();calc.dispose();aiKey.dispose();aiPrompt.dispose();aiEndpoint.dispose();aiModel.dispose();audio.dispose();super.dispose();}
  @override Widget build(BuildContext c)=>Material(child:LayoutBuilder(builder:(context,limits)=>Container(width:math.min(680.0,limits.maxWidth-28).toDouble(),height:math.min(400.0,limits.maxHeight-28).toDouble(),decoration:BoxDecoration(color:panel,border:Border.all(color:widget.ahian?lime:violet,width:1.2),borderRadius:BorderRadius.circular(14),boxShadow:[BoxShadow(color:Colors.black.withOpacity(.55),blurRadius:40)]),child:Column(children:[GestureDetector(onPanUpdate:(d)=>widget.onMove(d.delta),child:Container(height:34,padding:const EdgeInsets.symmetric(horizontal:11),decoration:const BoxDecoration(color:ink,borderRadius:BorderRadius.vertical(top:Radius.circular(13))),child:Row(children:[Container(width:27,height:27,decoration:BoxDecoration(color:violet.withOpacity(.15),borderRadius:BorderRadius.circular(9)),child:Center(child:Icon(widget.name=='Music'?Icons.graphic_eq:widget.name=='Video'?Icons.play_circle_outline:widget.name=='Files'?Icons.folder_open_rounded:widget.name=='Settings'?Icons.tune_rounded:Icons.apps_rounded,size:15,color:lime))),const SizedBox(width:10),Text(widget.name.toUpperCase(),style:const TextStyle(fontWeight:FontWeight.w900,fontSize:10,letterSpacing:2)),const Spacer(),const Text('SMTH / APP',style:TextStyle(color:muted,fontSize:9,letterSpacing:1)),const SizedBox(width:12),IconButton(onPressed:widget.onClose,style:IconButton.styleFrom(backgroundColor:raised,minimumSize:const Size(29,29)),icon:const Icon(Icons.close,size:15,color:lime))]))),Expanded(child:Padding(padding:const EdgeInsets.all(14),child:content()))]))));
  Future<void> loadFiles()async{try{final dir=_root??await getApplicationDocumentsDirectory();_root=dir;await dir.create(recursive:true);final list=await dir.list().toList();list.sort((a,b)=>a.path.toLowerCase().compareTo(b.path.toLowerCase()));if(mounted)setState((){_root=dir;_items=list;}); }catch(e){if(mounted)setState(()=>browserMsg='Files unavailable: '+e.toString());}}
  Future<void> addFile()async{if(_root==null)return;final name=TextEditingController(text:'untitled.txt');final chosen=await showDialog<String>(context:context,builder:(c)=>AlertDialog(backgroundColor:panel,title:const Text('Create a file'),content:TextField(controller:name,autofocus:true,decoration:const InputDecoration(hintText:'name.txt / .md / .json / .csv')),actions:[TextButton(onPressed:()=>Navigator.pop(c),child:const Text('CANCEL')),FilledButton(onPressed:()=>Navigator.pop(c,name.text.trim()),child:const Text('CREATE'))]));if(chosen==null||chosen.isEmpty)return;final safe=chosen.split(Platform.pathSeparator).last.replaceAll('/','').replaceAll('\\','');if(safe.isEmpty)return;final file=File(_root!.path+'/'+safe);if(!await file.exists())await file.writeAsString('');await loadFiles();}
@@ -237,31 +237,46 @@ class _AppWindowState extends State<AppWindow>{
  default:return const Center(child:Text('No app content available.'));
  }}
  Widget aiStudio()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
-  Row(children:[const Icon(Icons.auto_awesome,color:lime,size:18),const SizedBox(width:8),const Text('SMTH AI / CODE STUDIO',style:TextStyle(fontSize:10,letterSpacing:1.7,color:lime,fontWeight:FontWeight.w800)),const Spacer(),Text(aiBusy?'WORKING':'API MODE',style:const TextStyle(fontSize:8,color:muted))]),
-  const SizedBox(height:8),
-  TextField(controller:aiKey,obscureText:true,decoration:const InputDecoration(isDense:true,prefixIcon:Icon(Icons.key,size:16),hintText:'Anthropic API key (sk-ant-...)',filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none))),
-  const SizedBox(height:8),
+  Row(children:[const Icon(Icons.auto_awesome,color:lime,size:18),const SizedBox(width:8),const Text('SMTH AI / UNIVERSAL API STUDIO',style:TextStyle(fontSize:10,letterSpacing:1.4,color:lime,fontWeight:FontWeight.w800)),const Spacer(),Text(aiBusy?'WORKING':'API MODE',style:const TextStyle(fontSize:8,color:muted))]),
+  const SizedBox(height:7),
+  Row(children:[Expanded(child:DropdownButtonFormField<String>(value:aiProvider,decoration:const InputDecoration(isDense:true,labelText:'API type',filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none)),items:const [DropdownMenuItem(value:'OpenAI-compatible',child:Text('OpenAI-compatible')),DropdownMenuItem(value:'Anthropic',child:Text('Anthropic')),DropdownMenuItem(value:'Google Gemini',child:Text('Google Gemini'))],onChanged:(v){if(v==null)return;setState((){aiProvider=v;if(v=='Anthropic'){aiEndpoint.text='https://api.anthropic.com/v1/messages';aiModel.text='claude-sonnet-4-5-20250929';}else if(v=='Google Gemini'){aiEndpoint.text='https://generativelanguage.googleapis.com/v1beta/models';aiModel.text='gemini-2.5-flash';}else{aiEndpoint.text='https://api.openai.com/v1/chat/completions';aiModel.text='gpt-4o-mini';}});})),const SizedBox(width:7),Expanded(child:TextField(controller:aiModel,decoration:const InputDecoration(isDense:true,labelText:'Model',filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none))))]),
+  const SizedBox(height:6),
+  TextField(controller:aiEndpoint,decoration:const InputDecoration(isDense:true,labelText:'API endpoint',prefixIcon:Icon(Icons.link,size:15),filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none))),
+  const SizedBox(height:6),
+  TextField(controller:aiKey,obscureText:true,decoration:const InputDecoration(isDense:true,prefixIcon:Icon(Icons.key,size:16),hintText:'API key',filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none))),
+  const SizedBox(height:7),
   Expanded(child:Container(width:double.infinity,padding:const EdgeInsets.all(10),decoration:BoxDecoration(color:ink,borderRadius:BorderRadius.circular(11),border:Border.all(color:violet.withOpacity(.3))),child:ListView(children:[const Text('CODING ASSISTANT',style:TextStyle(fontSize:8,color:cyan,letterSpacing:1.4)),const SizedBox(height:8),Text(aiReply,style:const TextStyle(fontSize:11,height:1.5)),for(final line in aiHistory)Padding(padding:const EdgeInsets.only(top:9),child:Text(line,style:const TextStyle(fontSize:10,color:lime,height:1.4)))]))),
-  const SizedBox(height:8),
+  const SizedBox(height:7),
   Row(children:[Expanded(child:TextField(controller:aiPrompt,minLines:1,maxLines:3,decoration:const InputDecoration(isDense:true,hintText:'Ask about code, bugs, commands or architecture…',filled:true,fillColor:ink,border:OutlineInputBorder(borderSide:BorderSide.none)),onSubmitted:(_)=>sendAI())),const SizedBox(width:7),FilledButton(onPressed:aiBusy?null:sendAI,child:aiBusy?const SizedBox(width:15,height:15,child:CircularProgressIndicator(strokeWidth:2)):const Icon(Icons.arrow_upward,size:16))]),
-  const SizedBox(height:4),const Text('Uses your own Anthropic API account; API usage may cost money. Key is not saved to disk.',style:TextStyle(fontSize:8,color:muted))
+  const SizedBox(height:3),const Text('Supports OpenAI-compatible APIs, Anthropic Messages and Google Gemini. Custom endpoints must use one of these request formats. Your key stays in memory for this session.',style:TextStyle(fontSize:7,color:muted))
  ]);
  Future<void> sendAI()async{
-  final key=aiKey.text.trim(),prompt=aiPrompt.text.trim();
-  if(key.isEmpty||prompt.isEmpty){setState(()=>aiReply='Enter your Anthropic API key and a prompt first.');return;}
+  final key=aiKey.text.trim(),prompt=aiPrompt.text.trim(),model=aiModel.text.trim(),endpoint=aiEndpoint.text.trim();
+  if(key.isEmpty||prompt.isEmpty||model.isEmpty||endpoint.isEmpty){setState(()=>aiReply='Enter an API key, model, endpoint and prompt first.');return;}
   aiPrompt.clear();setState((){aiBusy=true;aiHistory.add('YOU  /  '+prompt);});
   HttpClient? client;
   try{
-   client=HttpClient();client.connectionTimeout=const Duration(seconds:25);
-   final req=await client.postUrl(Uri.parse('https://api.anthropic.com/v1/messages'));
-   req.headers.set(HttpHeaders.contentTypeHeader,'application/json');
-   req.headers.set('x-api-key',key);req.headers.set('anthropic-version','2023-06-01');
-   req.write(jsonEncode({'model':'claude-sonnet-4-5-20250929','max_tokens':1400,'system':'You are SMTH AI Studio, a concise coding assistant. Help with code, debugging, architecture and terminal commands. You cannot directly change files in this version; provide exact patches or commands and explain risks.','messages':[{'role':'user','content':prompt}]}));
-   final response=await req.close();final body=await response.transform(utf8.decoder).join();
-   final data=jsonDecode(body);
-   if(response.statusCode<200||response.statusCode>=300)throw Exception(data['error']?['message']??'API request failed (HTTP ${response.statusCode})');
-   final parts=(data['content'] as List? ?? []).where((x)=>x['type']=='text').map((x)=>x['text'].toString()).join('\n');
-   if(mounted)setState(()=>aiReply=parts.isEmpty?'The API returned no text.':parts);
+   client=HttpClient();client.connectionTimeout=const Duration(seconds:30);
+   Uri uri=Uri.parse(endpoint);Map<String,String> headers={HttpHeaders.contentTypeHeader:'application/json'};Map<String,dynamic> payload={};
+   if(aiProvider=='Anthropic'){
+    headers['x-api-key']=key;headers['anthropic-version']='2023-06-01';headers['anthropic-dangerous-direct-browser-access']='true';
+    payload={'model':model,'max_tokens':1800,'system':'You are SMTH AI Studio, a concise coding assistant. Help with code, debugging, architecture and terminal commands. You cannot directly change files in this version; provide exact patches or commands and explain risks.','messages':[{'role':'user','content':prompt}]};
+   }else if(aiProvider=='Google Gemini'){
+    final base=endpoint.endsWith('/')?endpoint.substring(0,endpoint.length-1):endpoint;
+    uri=Uri.parse('$base/$model:generateContent').replace(queryParameters:{'key':key});
+    payload={'systemInstruction':{'parts':[{'text':'You are SMTH AI Studio, a concise coding assistant. Help with code, debugging, architecture and terminal commands. You cannot directly change files in this version; provide exact patches or commands and explain risks.'}]},'contents':[{'role':'user','parts':[{'text':prompt}]}],'generationConfig':{'maxOutputTokens':1800}};
+   }else{
+    headers[HttpHeaders.authorizationHeader]='Bearer $key';
+    payload={'model':model,'max_tokens':1800,'messages':[{'role':'system','content':'You are SMTH AI Studio, a concise coding assistant. Help with code, debugging, architecture and terminal commands. You cannot directly change files in this version; provide exact patches or commands and explain risks.'},{'role':'user','content':prompt}]};
+   }
+   final req=await client.postUrl(uri);headers.forEach((k,v)=>req.headers.set(k,v));req.write(jsonEncode(payload));
+   final response=await req.close();final body=await response.transform(utf8.decoder).join();final data=jsonDecode(body);
+   if(response.statusCode<200||response.statusCode>=300)throw Exception(data['error']?['message']??data['message']??'API request failed (HTTP ${response.statusCode})');
+   String answer='';
+   if(aiProvider=='Anthropic'){answer=((data['content'] as List? ?? []).where((x)=>x['type']=='text').map((x)=>x['text'].toString()).join('\\n'));}
+   else if(aiProvider=='Google Gemini'){answer=(((data['candidates'] as List?)?.firstOrNull?['content']?['parts'] as List? ?? []).map((x)=>x['text']??'').join('\\n')).toString();}
+   else{answer=(data['choices'] as List).first['message']['content'].toString();}
+   if(mounted)setState(()=>aiReply=answer.isEmpty?'The API returned no text.':answer);
   }catch(e){if(mounted)setState(()=>aiReply='Request failed: ${e.toString()}');}
   finally{client?.close(force:true);if(mounted)setState(()=>aiBusy=false);}
  }
@@ -294,7 +309,7 @@ class Wallpaper extends CustomPainter{
   final band=Paint()..style=PaintingStyle.stroke..strokeWidth=5;
   for(int i=0;i<30;i++){final y=i*s.height/29;final shimmer=math.sin(phase*math.pi*2+i*.42);band.shader=LinearGradient(begin:Alignment.centerLeft,end:Alignment.centerRight,colors:[Colors.black.withOpacity(.9),Colors.white.withOpacity(.28+shimmer.abs()*.12),Colors.black.withOpacity(.78),Colors.white.withOpacity(.2+shimmer.abs()*.12),Colors.black.withOpacity(.9)]).createShader(Rect.fromLTWH(0,y,s.width,5));c.drawLine(Offset(0,y+math.sin(phase*6+i*.3)*(ahian?5:1)),Offset(s.width,y),band);}
   final sheen=Paint()..shader=RadialGradient(center:Alignment(-.45+phase*.15,-.3),radius:1.1,colors:[Colors.white.withOpacity(.34),Colors.white.withOpacity(.04),Colors.transparent],stops:const [0,.25,1]).createShader(rect);c.drawRect(rect,sheen);
-  if(ahian){final accent=Paint()..style=PaintingStyle.stroke..strokeWidth=1.4..color=(phase<.5?lime:violet).withOpacity(.8);for(int i=0;i<12;i++){final x=(i/12*s.width+phase*s.width*.18)%s.width;c.drawLine(Offset(x,0),Offset(x-s.height*.22,s.height),accent);}final pulse=.5+.5*math.sin(phase*math.pi*2);c.drawCircle(Offset(s.width*.5,s.height*.48),40+pulse*12,Paint()..color=lime.withOpacity(.035+pulse*.045));}
+  if(ahian){for(int i=0;i<18;i++){final x=(i/18*s.width+phase*s.width*.24)%s.width;final hue=(phase*360+i*22)%360;final accent=Paint()..style=PaintingStyle.stroke..strokeWidth=1.35..color=HSVColor.fromAHSV(.72,hue,.78,1).toColor();c.drawLine(Offset(x,0),Offset(x-s.height*.22,s.height),accent);}final pulse=.5+.5*math.sin(phase*math.pi*2);c.drawCircle(Offset(s.width*.5,s.height*.48),40+pulse*12,Paint()..color=lime.withOpacity(.035+pulse*.045));}
  }
  void _singularity(Canvas c,Size s,double phase,bool animate){final rect=Offset.zero&s;c.drawRect(rect,Paint()..color=const Color(0xFF030306));final center=Offset(s.width*.52,s.height*.5);final radius=math.min(s.width,s.height)*.22;final ring=Paint()..style=PaintingStyle.stroke..strokeWidth=3;for(int i=0;i<34;i++){final a=i*math.pi/34+phase*(animate ? .18 : 0);ring.color=Colors.white.withOpacity(.025+(i%4)*.018);final path=Path();for(int j=0;j<=80;j++){final t=j/80*math.pi*2;final x=math.cos(t)*radius*(1+.22*math.cos(a));final y=math.sin(t)*radius*.42;final point=Offset(center.dx+x*math.cos(a)-y*math.sin(a),center.dy+x*math.sin(a)+y*math.cos(a));if(j==0)path.moveTo(point.dx,point.dy);else path.lineTo(point.dx,point.dy);}c.drawPath(path,ring);}c.drawCircle(center,radius*.64,Paint()..color=Colors.black);final glow=Paint()..shader=RadialGradient(colors:[Colors.white.withOpacity(.18),Colors.transparent]).createShader(Rect.fromCircle(center:center,radius:radius*1.6));c.drawCircle(center,radius*1.6,glow);}
  @override bool shouldRepaint(covariant Wallpaper o)=>o.ahian!=ahian||o.phase!=phase||o.contrast!=contrast||o.style!=style;
