@@ -38,7 +38,7 @@ disable_mode() {
 
 case "$MODE" in
   on) enable_mode ;;
-  off|--off) disable_mode ;;
+  off|--off|unahian) disable_mode ;;
   toggle) if [ -e "$STATE" ]; then disable_mode; else enable_mode; fi ;;
-  *) echo "Usage: ahian [on|off|--off]" >&2; exit 2 ;;
+  *) echo "Usage: ahian [on|off|--off] (unahian restores normal mode)" >&2; exit 2 ;;
 esac
