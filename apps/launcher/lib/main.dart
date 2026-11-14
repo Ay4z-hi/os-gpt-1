@@ -436,10 +436,10 @@ class Wallpaper extends CustomPainter{
   for(int i=0;i<9;i++){final p=Path()..moveTo(s.width*.42,s.height*(.08+i*.085))..cubicTo(s.width*.55,s.height*(.02+i*.085),s.width*.73,s.height*(.22+i*.06),s.width*1.04,s.height*(.10+i*.08));c.drawPath(p,Paint()..style=PaintingStyle.stroke..strokeWidth=1.2..color=(i.isEven?const Color(0xFFBCA5F3):const Color(0xFF55D6D0)).withOpacity(.18));}
   for(int i=0;i<4;i++){orbit.color=(i.isEven?const Color(0xFFBCA5F3):const Color(0xFF55D6D0)).withOpacity(.5-i*.07);c.drawOval(Rect.fromCenter(center:center,width:s.width*(.30+i*.055),height:s.height*(.25+i*.045)),orbit);}
   final glyphs=<List<String>>[
-   ['10001','10001','10001','11001','10101','10011','10001'],
-   ['11110','10001','10001','11110','10001','10001','11110'],
-   ['10000','10000','10000','10000','10000','10000','11111'],
+   ['01111','10000','10000','01110','00001','00001','11110'],
    ['10001','11011','10101','10101','10001','10001','10001'],
+   ['11111','00100','00100','00100','00100','00100','00100'],
+   ['10001','10001','10001','11111','10001','10001','10001'],
   ];
   final scale=math.min(s.width*.0062,s.height*.011);final start=Offset(s.width*.085,s.height*.72);final dotPaint=Paint()..color=Colors.white.withOpacity(.95);
   for(int g=0;g<glyphs.length;g++){for(int y=0;y<7;y++){for(int x=0;x<5;x++){if(glyphs[g][y][x]=='1'){final cx=start.dx+g*(7*scale)+x*scale;final cy=start.dy+y*scale;c.drawCircle(Offset(cx,cy),scale*.34,dotPaint);}}}}
