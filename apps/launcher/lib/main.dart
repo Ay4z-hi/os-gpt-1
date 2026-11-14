@@ -128,26 +128,172 @@ class _AppWindowState extends State<AppWindow>{
  ]);
  String _time(Duration d)=>'${d.inMinutes.remainder(60).toString().padLeft(2,'0')}:${d.inSeconds.remainder(60).toString().padLeft(2,'0')}';
  Widget videoContent()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Row(children:[const Text('VIDEO LIBRARY',style:TextStyle(color:lime,fontSize:9,letterSpacing:2)),const Spacer(),FilledButton.icon(onPressed:pickVideos,icon:const Icon(Icons.add,size:16),label:const Text('ADD VIDEO'))]),const SizedBox(height:12),Expanded(child:videos.isEmpty?Center(child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[const Icon(Icons.video_library_outlined,size:44,color:muted),const SizedBox(height:10),const Text('Your videos, one place',style:TextStyle(fontWeight:FontWeight.bold)),const SizedBox(height:5),const Text('Choose a video to open it in your device player.',style:TextStyle(color:muted,fontSize:10))])):GridView.builder(itemCount:videos.length,gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:3,childAspectRatio:1.5,crossAxisSpacing:9,mainAxisSpacing:9),itemBuilder:(c,i){final v=videos[i];return InkWell(onTap:()=>OpenFilex.open(v.path!),borderRadius:BorderRadius.circular(13),child:Container(padding:const EdgeInsets.all(10),decoration:BoxDecoration(color:raised,borderRadius:BorderRadius.circular(13),border:Border.all(color:Colors.white12)),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[const Icon(Icons.play_circle_fill,size:32,color:lime),const SizedBox(height:7),Text(v.name,style:const TextStyle(fontSize:9,fontWeight:FontWeight.w700),maxLines:2,overflow:TextOverflow.ellipsis,textAlign:TextAlign.center),Text((v.extension??'VIDEO').toUpperCase(),style:const TextStyle(color:muted,fontSize:8))])));}))]);
- Widget filesContent()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
- Row(children:[const Text('FILES',style:TextStyle(color:lime,fontSize:18,fontWeight:FontWeight.w800,letterSpacing:1)),const Spacer(),PopupMenuButton<String>(tooltip:'Add to desktop',icon:const Icon(Icons.add_to_home_screen,color:lime),onSelected:widget.onDesktopAdd,itemBuilder:(c)=>widget.installed.where((x)=>!['Files','Store','Terminal'].contains(x)).map((x)=>PopupMenuItem(value:x,child:Text('Add '+x+' to desktop'))).toList()),IconButton(tooltip:'New file',onPressed:addFile,icon:const Icon(Icons.note_add_outlined)),IconButton(tooltip:'New folder',onPressed:addFolder,icon:const Icon(Icons.create_new_folder_outlined)),IconButton(tooltip:'Choose folder',onPressed:chooseFolder,icon:const Icon(Icons.folder_open)),IconButton(tooltip:'Import',onPressed:importFiles,icon:const Icon(Icons.file_upload_outlined)),IconButton(tooltip:'Up',onPressed:goUp,icon:const Icon(Icons.arrow_upward)),IconButton(tooltip:'Refresh',onPressed:loadFiles,icon:const Icon(Icons.refresh))]),
- Container(width:double.infinity,padding:const EdgeInsets.symmetric(horizontal:12,vertical:9),decoration:BoxDecoration(color:ink,border:Border.all(color:Colors.white12)),child:Row(children:[const Icon(Icons.folder_open,size:15,color:violet),const SizedBox(width:8),Expanded(child:Text(_root?.path??'Opening workspace…',maxLines:1,overflow:TextOverflow.ellipsis,style:const TextStyle(fontSize:10,color:muted)))])),
- const SizedBox(height:8),Expanded(child:_root==null?const Center(child:CircularProgressIndicator()):_items.isEmpty?const Center(child:Text('This folder is empty. Create something to begin.',style:TextStyle(color:muted))):ListView.separated(itemCount:_items.length,separatorBuilder:(_,__)=>const Divider(height:1,color:Colors.white10),itemBuilder:(c,i){final item=_items[i];final dir=item is Directory;return ListTile(dense:true,contentPadding:const EdgeInsets.symmetric(horizontal:8),leading:Container(width:36,height:36,decoration:BoxDecoration(color:raised,border:Border.all(color:Colors.white12)),child:Icon(dir?Icons.folder_outlined:Icons.insert_drive_file_outlined,color:dir?violet:lime,size:19)),title:Text(item.uri.pathSegments.isEmpty?item.path:item.uri.pathSegments.last,style:const TextStyle(fontSize:11,fontWeight:FontWeight.w600)),subtitle:Text(dir?'FOLDER':'FILE',style:const TextStyle(color:muted,fontSize:8,letterSpacing:1)),onTap:()=>previewFile(item),trailing:IconButton(onPressed:()=>removeItem(item),icon:const Icon(Icons.delete_outline,color:muted,size:17)));})),
- ]);
-Widget browserContent()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
- const SizedBox(height:8),const Center(child:Text('SEARCH THE WEB',style:TextStyle(fontSize:20,fontWeight:FontWeight.w800,letterSpacing:1))),const SizedBox(height:6),const Center(child:Text('find what you need. keep moving.',style:TextStyle(color:muted,fontSize:10))),
- const SizedBox(height:22),TextField(controller:address,style:const TextStyle(fontSize:13),textInputAction:TextInputAction.go,onSubmitted:(_)=>browse(),decoration:InputDecoration(prefixIcon:const Icon(Icons.search,color:lime),hintText:'Search or enter a website',filled:true,fillColor:ink,suffixIcon:IconButton(onPressed:browse,icon:const Icon(Icons.arrow_forward,color:lime)),border:OutlineInputBorder(borderRadius:BorderRadius.circular(28),borderSide:const BorderSide(color:Colors.white24)),enabledBorder:OutlineInputBorder(borderRadius:BorderRadius.circular(28),borderSide:const BorderSide(color:Colors.white24)))),
- const SizedBox(height:12),Text(browserMsg,style:const TextStyle(color:muted,fontSize:10)),const SizedBox(height:16),const Text('QUICK ACCESS',style:TextStyle(color:muted,fontSize:9,letterSpacing:2)),const SizedBox(height:8),Expanded(child:GridView.count(crossAxisCount:3,childAspectRatio:2.6,mainAxisSpacing:8,crossAxisSpacing:8,children:[for(final x in ['https://www.google.com','https://www.wikipedia.org','https://github.com','https://www.youtube.com','https://www.reddit.com','https://www.bing.com'])InkWell(onTap:(){address.text=x;browse();},child:Container(padding:const EdgeInsets.all(10),decoration:BoxDecoration(color:ink,border:Border.all(color:Colors.white12)),child:Row(children:[const Icon(Icons.language,size:16,color:violet),const SizedBox(width:8),Expanded(child:Text(Uri.parse(x).host,style:const TextStyle(fontSize:10),overflow:TextOverflow.ellipsis))])))])),const Text('Pages open in your default browser to keep SMTH lightweight.',style:TextStyle(color:muted,fontSize:9))
- ]);
-Widget storeContent()=>Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
- Row(children:[const Expanded(child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[Text('SMTH STORE',style:TextStyle(fontSize:19,fontWeight:FontWeight.w800)),Text('small tools. useful by design.',style:TextStyle(color:muted,fontSize:10))])),Text('${widget.installed.length} INSTALLED',style:const TextStyle(color:muted,fontSize:8,letterSpacing:1))]),
- const SizedBox(height:12),Expanded(child:GridView.builder(itemCount:catalog.where((x)=>!x.core).length,gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:2,childAspectRatio:3.0,crossAxisSpacing:8,mainAxisSpacing:8),itemBuilder:(c,i){final a=catalog.where((x)=>!x.core).elementAt(i);final active=widget.installed.contains(a.name);return Container(padding:const EdgeInsets.all(9),decoration:BoxDecoration(color:ink,border:Border.all(color:Colors.white12)),child:Row(children:[AppIcon(name:a.name,size:38,monochrome:!widget.ahian),const SizedBox(width:9),Expanded(child:Column(mainAxisAlignment:MainAxisAlignment.center,crossAxisAlignment:CrossAxisAlignment.start,children:[Text(a.name,style:const TextStyle(fontSize:11,fontWeight:FontWeight.w700)),Text(a.desc,style:const TextStyle(color:muted,fontSize:8),maxLines:1,overflow:TextOverflow.ellipsis),Text(active?'READY TO OPEN':'AVAILABLE',style:TextStyle(color:active?lime:muted,fontSize:7,letterSpacing:1))])),IconButton(onPressed:(){widget.onInstall(a.name,!active);setState((){});},icon:Icon(active?Icons.check_circle_outline:Icons.add_circle_outline,color:active?lime:violet,size:20))]));})),
- const Text('Apps are added to this launcher profile. Linux packages remain managed by APT.',style:TextStyle(color:muted,fontSize:8))
- ]);
-Widget calculatorContent()=>StatefulBuilder(builder:(context,setCalc)=>Container(color:const Color(0xFFF3F3F5),padding:const EdgeInsets.all(10),child:Column(children:[
- Align(alignment:Alignment.centerRight,child:Text(result.isEmpty?(calc.text.isEmpty?'0':calc.text):result,style:const TextStyle(color:Color(0xFF55555B),fontSize:38,fontWeight:FontWeight.w300))),
- const SizedBox(height:8),const Divider(color:Color(0xFFD8D8DC)),const SizedBox(height:6),
- Expanded(child:GridView.count(crossAxisCount:4,mainAxisSpacing:8,crossAxisSpacing:8,childAspectRatio:1.65,children:[for(final key in ['C','(',')','⌫','7','8','9','÷','4','5','6','×','1','2','3','−','±','0','.','='])InkWell(borderRadius:BorderRadius.circular(50),onTap:(){setCalc((){if(key=='C'){calc.clear();result='';}else if(key=='⌫'){if(calc.text.isNotEmpty)calc.text=calc.text.substring(0,calc.text.length-1);}else if(key=='='){calculate();}else{calc.text+=key=='×'?'*':key=='÷'?'/':key=='−'?'-':key=='±'?' -':key;result='';}});},child:Container(decoration:BoxDecoration(color:key=='='?const Color(0xFF20A52B):['÷','×','−'].contains(key)?const Color(0xFF858589):['C','(',')','%','⌫'].contains(key)?const Color(0xFFE6E6E9):const Color(0xFFFAFAFC),shape:BoxShape.circle),alignment:Alignment.center,child:Text(key,style:TextStyle(color:key=='='||['÷','×','−'].contains(key)?Colors.white:const Color(0xFF55555B),fontSize:22,fontWeight:FontWeight.w500))))])),
- ])));
+ Widget filesContent() {
+  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    Row(children: [
+      const Text('FILES', style: TextStyle(color: lime, fontSize: 18, fontWeight: FontWeight.w800, letterSpacing: 1)),
+      const Spacer(),
+      PopupMenuButton<String>(tooltip: 'Add to desktop', icon: const Icon(Icons.add_to_home_screen, color: lime), onSelected: widget.onDesktopAdd, itemBuilder: (c) => widget.installed.where((x) => !['Files', 'Store', 'Terminal'].contains(x)).map((x) => PopupMenuItem(value: x, child: Text('Add ' + x + ' to desktop'))).toList()),
+      IconButton(tooltip: 'New file', onPressed: addFile, icon: const Icon(Icons.note_add_outlined)),
+      IconButton(tooltip: 'New folder', onPressed: addFolder, icon: const Icon(Icons.create_new_folder_outlined)),
+      IconButton(tooltip: 'Choose folder', onPressed: chooseFolder, icon: const Icon(Icons.folder_open)),
+      IconButton(tooltip: 'Import', onPressed: importFiles, icon: const Icon(Icons.file_upload_outlined)),
+      IconButton(tooltip: 'Up', onPressed: goUp, icon: const Icon(Icons.arrow_upward)),
+      IconButton(tooltip: 'Refresh', onPressed: loadFiles, icon: const Icon(Icons.refresh)),
+    ]),
+    Container(width: double.infinity, padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9), decoration: BoxDecoration(color: ink, border: Border.all(color: Colors.white12)), child: Row(children: [
+      const Icon(Icons.folder_open, size: 15, color: violet), const SizedBox(width: 8),
+      Expanded(child: Text(_root?.path ?? 'Opening workspace…', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10, color: muted))),
+    ])),
+    const SizedBox(height: 8),
+    Expanded(child: _root == null
+      ? const Center(child: CircularProgressIndicator())
+      : _items.isEmpty
+        ? const Center(child: Text('This folder is empty. Create something to begin.', style: TextStyle(color: muted)))
+        : ListView.separated(
+            itemCount: _items.length,
+            separatorBuilder: (_, __) => const Divider(height: 1, color: Colors.white10),
+            itemBuilder: (c, i) {
+              final item = _items[i];
+              final dir = item is Directory;
+              return ListTile(
+                dense: true,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                leading: Container(width: 36, height: 36, decoration: BoxDecoration(color: raised, border: Border.all(color: Colors.white12)), child: Icon(dir ? Icons.folder_outlined : Icons.insert_drive_file_outlined, color: dir ? violet : lime, size: 19)),
+                title: Text(item.uri.pathSegments.isEmpty ? item.path : item.uri.pathSegments.last, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
+                subtitle: Text(dir ? 'FOLDER' : 'FILE', style: const TextStyle(color: muted, fontSize: 8, letterSpacing: 1)),
+                onTap: () => previewFile(item),
+                trailing: IconButton(onPressed: () => removeItem(item), icon: const Icon(Icons.delete_outline, color: muted, size: 17)),
+              );
+            },
+          ),
+    ),
+  ]);
+}
+
+Widget browserContent() {
+  final quickLinks = ['https://www.google.com', 'https://www.wikipedia.org', 'https://github.com', 'https://www.youtube.com', 'https://www.reddit.com', 'https://www.bing.com'];
+  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    const SizedBox(height: 8),
+    const Center(child: Text('SEARCH THE WEB', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, letterSpacing: 1))),
+    const SizedBox(height: 6),
+    const Center(child: Text('find what you need. keep moving.', style: TextStyle(color: muted, fontSize: 10))),
+    const SizedBox(height: 22),
+    TextField(
+      controller: address,
+      style: const TextStyle(fontSize: 13),
+      textInputAction: TextInputAction.go,
+      onSubmitted: (_) => browse(),
+      decoration: InputDecoration(
+        prefixIcon: const Icon(Icons.search, color: lime),
+        hintText: 'Search or enter a website',
+        filled: true,
+        fillColor: ink,
+        suffixIcon: IconButton(onPressed: browse, icon: const Icon(Icons.arrow_forward, color: lime)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(28), borderSide: const BorderSide(color: Colors.white24)),
+        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(28), borderSide: const BorderSide(color: Colors.white24)),
+      ),
+    ),
+    const SizedBox(height: 12),
+    Text(browserMsg, style: const TextStyle(color: muted, fontSize: 10)),
+    const SizedBox(height: 16),
+    const Text('QUICK ACCESS', style: TextStyle(color: muted, fontSize: 9, letterSpacing: 2)),
+    const SizedBox(height: 8),
+    Expanded(child: GridView.count(
+      crossAxisCount: 3,
+      childAspectRatio: 2.6,
+      mainAxisSpacing: 8,
+      crossAxisSpacing: 8,
+      children: [for (final x in quickLinks) InkWell(
+        onTap: () { address.text = x; browse(); },
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(color: ink, border: Border.all(color: Colors.white12)),
+          child: Row(children: [
+            const Icon(Icons.language, size: 16, color: violet),
+            const SizedBox(width: 8),
+            Expanded(child: Text(Uri.parse(x).host, style: const TextStyle(fontSize: 10), overflow: TextOverflow.ellipsis)),
+          ]),
+        ),
+      )],
+    )),
+    const Text('Pages open in your default browser to keep SMTH lightweight.', style: TextStyle(color: muted, fontSize: 9)),
+  ]);
+}
+
+Widget storeContent() {
+  final apps = catalog.where((x) => !x.core).toList();
+  return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    Row(children: [
+      const Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text('SMTH STORE', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800)),
+        Text('small tools. useful by design.', style: TextStyle(color: muted, fontSize: 10)),
+      ])),
+      Text('${widget.installed.length} INSTALLED', style: const TextStyle(color: muted, fontSize: 8, letterSpacing: 1)),
+    ]),
+    const SizedBox(height: 12),
+    Expanded(child: GridView.builder(
+      itemCount: apps.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, childAspectRatio: 3.0, crossAxisSpacing: 8, mainAxisSpacing: 8),
+      itemBuilder: (c, i) {
+        final a = apps[i];
+        final active = widget.installed.contains(a.name);
+        return Container(
+          padding: const EdgeInsets.all(9),
+          decoration: BoxDecoration(color: ink, border: Border.all(color: Colors.white12)),
+          child: Row(children: [
+            AppIcon(name: a.name, size: 38, monochrome: !widget.ahian),
+            const SizedBox(width: 9),
+            Expanded(child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(a.name, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+              Text(a.desc, style: const TextStyle(color: muted, fontSize: 8), maxLines: 1, overflow: TextOverflow.ellipsis),
+              Text(active ? 'READY TO OPEN' : 'AVAILABLE', style: TextStyle(color: active ? lime : muted, fontSize: 7, letterSpacing: 1)),
+            ])),
+            IconButton(onPressed: () { widget.onInstall(a.name, !active); setState(() {}); }, icon: Icon(active ? Icons.check_circle_outline : Icons.add_circle_outline, color: active ? lime : violet, size: 20)),
+          ]),
+        );
+      },
+    )),
+    const Text('Apps are added to this launcher profile. Linux packages remain managed by APT.', style: TextStyle(color: muted, fontSize: 8)),
+  ]);
+}
+
+Widget calculatorContent() {
+  const bg = Color(0xFFF3F3F5);
+  return Container(color: bg, padding: const EdgeInsets.all(8), child: Column(children: [
+    Expanded(flex: 3, child: Align(alignment: Alignment.bottomRight, child: Text(result.isEmpty ? (calc.text.isEmpty ? '0' : calc.text) : result, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: Color(0xFF55555B), fontSize: 38, fontWeight: FontWeight.w300)))),
+    const SizedBox(height: 8),
+    const Divider(color: Color(0xFFD8D8DC)),
+    Expanded(flex: 7, child: GridView.count(
+      physics: const NeverScrollableScrollPhysics(),
+      crossAxisCount: 4,
+      mainAxisSpacing: 6,
+      crossAxisSpacing: 6,
+      childAspectRatio: 1.5,
+      children: [for (final key in ['C', '()', '%', '⌫', '7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '±', '0', '.', '='])
+        InkWell(
+          borderRadius: BorderRadius.circular(60),
+          onTap: () {
+            setState(() {
+              if (key == 'C') { calc.clear(); result = ''; }
+              else if (key == '⌫') { if (calc.text.isNotEmpty) calc.text = calc.text.substring(0, calc.text.length - 1); result = ''; }
+              else if (key == '=') { calculate(); }
+              else { calc.text += key == '×' ? '*' : key == '÷' ? '/' : key == '−' ? '-' : key == '±' ? '-' : key == '()' ? '(' : key; result = ''; }
+            });
+          },
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: key == '=' ? const Color(0xFF20A52B) : ['÷', '×', '−'].contains(key) ? const Color(0xFF858589) : ['C', '()', '%', '⌫'].contains(key) ? const Color(0xFFE6E6E9) : const Color(0xFFFAFAFC),
+            ),
+            child: Text(key, style: TextStyle(color: key == '=' || ['÷', '×', '−'].contains(key) ? Colors.white : const Color(0xFF55555B), fontSize: 21, fontWeight: FontWeight.w500)),
+          ),
+        ),
+    )),
+  ]));
+}
+
 Widget content(){switch(widget.name){case'Files':return filesContent();
  case'Browser':return browserContent();
  case'Terminal':return Column(children:[Expanded(child:Container(width:double.infinity,padding:const EdgeInsets.all(14),decoration:BoxDecoration(color:ink,borderRadius:BorderRadius.circular(8)),child:ListView(children:[for(final l in widget.terminal)Padding(padding:const EdgeInsets.only(bottom:7),child:Text(l,style:const TextStyle(fontFamily:'monospace',fontSize:11,color:lime)))]))),const SizedBox(height:8),Row(children:[const Text('smth \$ ',style:TextStyle(color:violet,fontFamily:'monospace')),Expanded(child:TextField(controller:command,style:const TextStyle(fontFamily:'monospace',fontSize:12),decoration:const InputDecoration(hintText:'type help',isDense:true),onSubmitted:(v){widget.onCommand(v);command.clear();setState((){});})),IconButton(onPressed:(){widget.onCommand(command.text);command.clear();setState((){});},icon:const Icon(Icons.arrow_forward,color:lime))])]);
