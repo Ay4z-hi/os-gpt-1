@@ -7,31 +7,38 @@ STATE="$SMTH_CONFIG/ahian.enabled"
 WALL_NORMAL=/usr/share/backgrounds/smth/smth-eclipse.svg
 WALL_AHIAN=/usr/share/backgrounds/smth/smth-ahian.svg
 mkdir -p "$SMTH_CONFIG" "$CONFIG/waybar" "$CONFIG/wofi"
+
 enable_mode() {
   : > "$STATE"
-  cp /usr/share/smth/ahian-wofi.css "$CONFIG/wofi/style.css"
+  if [ -f /usr/share/smth/ahian-wofi.css ]; then
+    cp /usr/share/smth/ahian-wofi.css "$CONFIG/wofi/style.css"
+  fi
   swaymsg "output * bg $WALL_AHIAN fill" >/dev/null 2>&1 || true
   swaymsg "gaps inner 16" >/dev/null 2>&1 || true
-  swaymsg "gaps outer 14" >/dev/null 2>&1 || true
-  swaymsg "default_border pixel 3" >/dev/null 2>&1 || true
-  swaymsg "client.focused #C8F169 #000000 #FFFFFF #A56EFF #C8F169" >/dev/null 2>&1 || true
+  swaymsg "gaps outer 12" >/dev/null 2>&1 || true
+  swaymsg "default_border pixel 2" >/dev/null 2>&1 || true
+  swaymsg "client.focused #D71921 #080808 #F2F2F2 #777777 #D71921" >/dev/null 2>&1 || true
   pkill -USR2 waybar 2>/dev/null || true
-  notify-send "SMTH / AHIAN" "Alternate desktop activated" 2>/dev/null || true
+  notify-send "SMTH / AHIAN" "A different, calmer desktop is ready." 2>/dev/null || true
 }
+
 disable_mode() {
   rm -f "$STATE"
-  cp /etc/skel/.config/wofi/style.css "$CONFIG/wofi/style.css"
+  if [ -f /etc/skel/.config/wofi/style.css ]; then
+    cp /etc/skel/.config/wofi/style.css "$CONFIG/wofi/style.css"
+  fi
   swaymsg "output * bg $WALL_NORMAL fill" >/dev/null 2>&1 || true
   swaymsg "gaps inner 10" >/dev/null 2>&1 || true
   swaymsg "gaps outer 8" >/dev/null 2>&1 || true
-  swaymsg "default_border pixel 2" >/dev/null 2>&1 || true
-  swaymsg "client.focused #A56EFF #000000 #FFFFFF #C8F169 #A56EFF" >/dev/null 2>&1 || true
+  swaymsg "default_border pixel 1" >/dev/null 2>&1 || true
+  swaymsg "client.focused #D71921 #080808 #F2F2F2 #777777 #D71921" >/dev/null 2>&1 || true
   pkill -USR2 waybar 2>/dev/null || true
-  notify-send "SMTH" "Standard desktop restored" 2>/dev/null || true
+  notify-send "SMTH" "Standard desktop restored." 2>/dev/null || true
 }
+
 case "$MODE" in
   on) enable_mode ;;
   off|--off) disable_mode ;;
   toggle) if [ -e "$STATE" ]; then disable_mode; else enable_mode; fi ;;
-  *) echo "Usage: ahian [on|off|--off]"; exit 2 ;;
+  *) echo "Usage: ahian [on|off|--off]" >&2; exit 2 ;;
 esac
