@@ -1,0 +1,132 @@
+name: Publish SMTH OS release
+
+on:
+  workflow_run:
+    workflows:
+      - Build SMTH OS ISO
+      - Build SMTH launchers
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: write
+
+concurrency:
+  group: smth-latest-release
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find successful ISO and launcher builds for this exact commit
+        id: pair
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.payload.workflow_run.head_sha;
+            const runs = await github.paginate(github.rest.actions.listWorkflowRunsForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: "main",
+              per_page: 100
+            });
+            const latest = name => runs.workflow_runs
+              .filter(r => r.name === name && r.head_sha === sha &&
+                r.head_branch === "main" && r.conclusion === "success")
+              .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))[0];
+            const iso = latest("Build SMTH OS ISO");
+            const launchers = latest("Build SMTH launchers");
+            if (!iso || !launchers) {
+              core.notice("Waiting for both ISO and launcher builds to succeed for " + sha + ". A later workflow completion will retry publishing.");
+              core.setOutput("ready", "false");
+              return;
+            }
+            core.setOutput("ready", "true");
+            core.setOutput("sha", sha);
+            core.setOutput("iso_run", String(iso.id));
+            core.setOutput("launcher_run", String(launchers.id));
+            core.setOutput("iso_url", iso.html_url);
+            core.setOutput("launcher_url", launchers.html_url);
+      - name: Download ISO artifact
+        if: steps.pair.outputs.ready == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: smth-os-amd64-live-iso
+          run-id: ${{ steps.pair.outputs.iso_run }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: dist/iso
+      - name: Download Android APK
+        if: steps.pair.outputs.ready == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: SMTH-Android-APK
+          run-id: ${{ steps.pair.outputs.launcher_run }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: dist/android
+      - name: Download Windows launcher
+        if: steps.pair.outputs.ready == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: SMTH-Windows-Launcher
+          run-id: ${{ steps.pair.outputs.launcher_run }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: dist/windows
+      - name: Prepare release files and checksums
+        if: steps.pair.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          iso="$(find dist/iso -type f -iname '*.iso' -print -quit)"
+          test -n "$iso"
+          test -f dist/android/app-release.apk
+          test -f dist/windows/SMTH-Windows-Launcher.zip
+          cp "$iso" release/SMTH-OS-amd64.iso
+          cp dist/android/app-release.apk release/SMTH-Android.apk
+          cp dist/windows/SMTH-Windows-Launcher.zip release/SMTH-Windows-Launcher.zip
+          cd release
+          sha256sum SMTH-OS-amd64.iso SMTH-Android.apk SMTH-Windows-Launcher.zip > SHA256SUMS.txt
+      - name: Move the rolling latest tag to this build
+        if: steps.pair.outputs.ready == 'true'
+        uses: actions/github-script@v7
+        env:
+          BUILD_SHA: ${{ steps.pair.outputs.sha }}
+        with:
+          script: |
+            const ref = "tags/latest";
+            const sha = process.env.BUILD_SHA;
+            try {
+              await github.rest.git.getRef({owner: context.repo.owner, repo: context.repo.repo, ref});
+              await github.rest.git.updateRef({owner: context.repo.owner, repo: context.repo.repo, ref, sha, force: true});
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.git.createRef({owner: context.repo.owner, repo: context.repo.repo, ref: "refs/" + ref, sha});
+            }
+      - name: Create or update rolling latest release
+        if: steps.pair.outputs.ready == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          target_commitish: ${{ steps.pair.outputs.sha }}
+          name: SMTH OS — Latest
+          body: |
+            Automatically updated from the latest commit for which **both** the ISO and launcher builds succeeded.
+
+            Commit: ${{ steps.pair.outputs.sha }}
+
+            - ISO build: ${{ steps.pair.outputs.iso_url }}
+            - Android + Windows build: ${{ steps.pair.outputs.launcher_url }}
+
+            Assets are replaced on each successful update. SHA-256 checksums are included.
+          files: |
+            release/SMTH-OS-amd64.iso
+            release/SMTH-Android.apk
+            release/SMTH-Windows-Launcher.zip
+            release/SHA256SUMS.txt
+          overwrite_files: true
+          make_latest: true
