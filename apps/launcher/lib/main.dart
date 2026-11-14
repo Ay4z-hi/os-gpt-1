@@ -33,7 +33,7 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  late final AnimationController motion=AnimationController(vsync:this,duration:const Duration(seconds:28))..repeat();
  final Set<String> installed={'Files','Browser','Terminal','Settings','Store','Music','Video','Notes','Calculator','Clock','AI Studio'};final Set<String> desktopApps={};
  final List<String> terminal=['SMTH // COMMAND DESK','Type help for available commands.'];
- bool ahian=false,wifi=true,bluetooth=false,quiet=false,contrast=false,pointerOn=false,notice=false,menu=false,zen=false;String wallpaper='metal',activeApp='';
+ bool ahian=false,wifi=true,bluetooth=false,quiet=false,contrast=false,pointerOn=false,notice=false,menu=false,zen=false,ahianSequence=false;int ahianPhase=0,ahianCountdown=9;String wallpaper='metal',activeApp='';
  Offset pointer=const Offset(80,80);String note='Welcome to SMTH Notes.\n\nA small space for your thoughts.';
  @override void initState(){super.initState();_load();}
  Future<void> _load()async{final p=await SharedPreferences.getInstance();if(!mounted)return;setState((){ahian=p.getBool('ahian')??false;wifi=p.getBool('wifi')??true;bluetooth=p.getBool('bluetooth')??false;quiet=p.getBool('quiet')??false;contrast=p.getBool('contrast')??false;pointerOn=p.getBool('pointer')??true;wallpaper=p.getString('wallpaper')??'metal';note=p.getString('note')??note;installed.addAll(p.getStringList('installed')??[]);desktopApps.addAll(p.getStringList('desktopApps')??[]);});}
@@ -41,21 +41,21 @@ class _DesktopState extends State<Desktop> with TickerProviderStateMixin{
  void ahianToggle(){setState(()=>ahian=!ahian);save('ahian',ahian);}
  void open(String n){if(n=='YouTube'||n=='Instagram'||n=='Viber'){final uri=Uri.parse(n=='YouTube'?'vnd.youtube://':n=='Instagram'?'instagram://app':'viber://');launchUrl(uri,mode:LaunchMode.externalApplication).then((ok){if(!ok&&mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text(n+' app is not installed. Install its official app first.')));});return;}if(!installed.contains(n)){show('Store');return;}setState(()=>activeApp=n);show(n);}
  void show(String n){Offset position=Offset.zero;showGeneralDialog(context:context,barrierDismissible:true,barrierLabel:n,barrierColor:Colors.black.withOpacity(.7),transitionDuration:const Duration(milliseconds:220),pageBuilder:(c,a,b)=>StatefulBuilder(builder:(dialogContext,setDialogState)=>Center(child:Transform.translate(offset:position,child:AppWindow(name:n,ahian:ahian,installed:installed,wifi:wifi,bluetooth:bluetooth,quiet:quiet,contrast:contrast,pointerOn:pointerOn,note:note,terminal:terminal,onMove:(delta)=>setDialogState(()=>position+=delta),onClose:(){setState(()=>activeApp='');Navigator.pop(c);},wallpaper:wallpaper,onWallpaper:(v){setState(()=>wallpaper=v);save('wallpaper',v);},onToggle:(k,v){setState((){switch(k){case'wifi':wifi=v;break;case'bluetooth':bluetooth=v;break;case'quiet':quiet=v;break;case'contrast':contrast=v;break;case'pointer':pointerOn=v;break;}});save(k,v);},onInstall:(name,v){setState((){if(v){installed.add(name);}else{installed.remove(name);}});save('installed',installed.toList());},onNote:(v){note=v;save('note',v);},onCommand:command,onAhian:ahianToggle,onOpen:(x){Navigator.pop(c);open(x);},onDesktopAdd:(x){setState(()=>desktopApps.add(x));save('desktopApps',desktopApps.toList());})))),transitionBuilder:(c,a,b,child)=>FadeTransition(opacity:a,child:ScaleTransition(scale:Tween<double>(begin:.96,end:1).animate(CurvedAnimation(parent:a,curve:Curves.easeOutCubic)),child:child)));}
- void command(String raw){final s=raw.trim();if(s.isEmpty)return;final parts=s.split(' ');setState((){terminal.add('smth@desk  '+s);switch(parts.first.toLowerCase()){
- case'help':terminal.add('Built-ins: help, echo, open, ahian, clear. Other commands run in the app user shell.');break;
- case'echo':terminal.add(s.length>5?s.substring(5):'');break;
- case'ahian':if(parts.length>1&&parts[1].toLowerCase()=='on'){ahian=true;}else if(parts.length>1&&parts[1].toLowerCase()=='off'){ahian=false;}else{ahian=!ahian;}save('ahian',ahian);terminal.add('AHIAN easter egg '+(ahian?'unlocked — all systems animated':'closed'));break;
+ void command(String raw){final input=raw.trim();if(input.isEmpty)return;final parts=input.split(' ');if(parts.first.toLowerCase()=='ahian'){setState(()=>terminal.add('smth@desk  '+input));_startAhianSequence();return;}setState(()=>{terminal.add('smth@desk  '+input);switch(parts.first.toLowerCase()){
+ case'help':terminal.add('Built-ins: help, echo, open, ahian, clear.');break;
+ case'echo':terminal.add(input.length>5?input.substring(5):'');break;
  case'clear':terminal.clear();break;
  case'open':if(parts.length>1){final target=parts[1].toLowerCase();final match=catalog.where((x)=>x.name.toLowerCase()==target);if(match.isNotEmpty){terminal.add('Opening '+match.first.name);Future.microtask(()=>open(match.first.name));}else{terminal.add('No app named '+parts[1]);}}else{terminal.add('Usage: open [app]');}break;
- default:terminal.add('Running in '+Platform.operatingSystem+' user shell…');Future.microtask(()=>runHostCommand(s));
+ default:terminal.add('Running in '+Platform.operatingSystem+' user shell…');Future.microtask(()=>runHostCommand(input));
  }if(terminal.length>100)terminal.removeRange(0,terminal.length-100);});}
+ Future<void> _startAhianSequence()async{if(ahianSequence)return;try{Navigator.of(context).pop();}catch(_){}setState(()=>{ahianSequence=true;ahianPhase=0;ahianCountdown=9;});await Future.delayed(const Duration(milliseconds:2200));if(!mounted)return;setState(()=>ahianPhase=1);for(var n=9;n>=1;n--){if(!mounted)return;setState(()=>ahianCountdown=n);await Future.delayed(const Duration(seconds:1));}if(!mounted)return;setState(()=>{ahian=true;wallpaper='singularity';ahianPhase=2;});save('ahian',true);save('wallpaper','singularity');await Future.delayed(const Duration(milliseconds:1800));if(mounted)setState(()=>ahianSequence=false);}
  Future<void> runHostCommand(String value)async{try{final result=await Process.run(Platform.isWindows?'cmd.exe':'sh',Platform.isWindows?['/c',value]:['-c',value]);final out=(result.stdout.toString()+'\n'+result.stderr.toString()).trim();if(mounted)setState(()=>terminal.add(out.isEmpty?'[exit '+result.exitCode.toString()+']':out));}catch(e){if(mounted)setState(()=>terminal.add('Command unavailable in this app sandbox: '+e.toString()));}}
  @override void dispose(){motion.dispose();super.dispose();}
  @override Widget build(BuildContext c)=>Scaffold(body:MouseRegion(cursor:pointerOn?SystemMouseCursors.none:SystemMouseCursors.basic,onHover:(e)=>setState(()=>pointer=e.localPosition),child:Listener(onPointerHover:(e)=>setState(()=>pointer=e.localPosition),onPointerDown:(e)=>setState(()=>pointer=e.localPosition),child:Stack(children:[
  Positioned.fill(child:AnimatedBuilder(animation:motion,builder:(c,_)=>CustomPaint(painter:Wallpaper(ahian,motion.value,contrast,wallpaper)))),
  SafeArea(child:AnimatedBuilder(animation:motion,builder:(context,child){final t=motion.value*math.pi*2;return Transform.translate(offset:ahian?Offset(math.sin(t)*2,math.cos(t*1.3)*1.5):Offset.zero,child:Transform.scale(scale:ahian?1+math.sin(t*2)*.002:1,child:child));},child:Column(children:[top(),Expanded(child:workspace()),dock()]))),
  if(activeApp.isNotEmpty)Positioned(top:7,left:0,right:0,child:Center(child:GestureDetector(onTap:()=>open(activeApp),child:AnimatedBuilder(animation:motion,builder:(context,_){final pulse=.5+.5*math.sin(motion.value*math.pi*2);return AnimatedContainer(duration:const Duration(milliseconds:320),padding:const EdgeInsets.symmetric(horizontal:18,vertical:9),decoration:BoxDecoration(color:ink,borderRadius:BorderRadius.circular(28),border:Border.all(color:(ahian?lime:Colors.white).withOpacity(.25+pulse*.25)),boxShadow:[BoxShadow(color:(ahian?lime:Colors.black).withOpacity(.10+pulse*.12),blurRadius:20)]),child:Row(mainAxisSize:MainAxisSize.min,children:[Icon(activeApp=='Music'?Icons.graphic_eq:activeApp=='Video'?Icons.play_circle_outline:activeApp=='Files'?Icons.folder_open_rounded:Icons.apps_rounded,size:15,color:lime),const SizedBox(width:8),Text(activeApp.toUpperCase(),style:const TextStyle(fontSize:9,fontWeight:FontWeight.w800,letterSpacing:1.4)),const SizedBox(width:9),Container(width:5,height:5,decoration:BoxDecoration(color:lime,shape:BoxShape.circle,boxShadow:[BoxShadow(color:lime.withOpacity(pulse),blurRadius:7)]))]));})))),if(menu)Positioned(left:16,bottom:76,child:startMenu()),
- if(notice&&!quiet&&!zen)Positioned(right:18,top:58,child:notifications()),
+ if(notice&&!quiet&&!zen)Positioned(right:18,top:58,child:notifications()),\n if(ahianSequence)Positioned.fill(child:AhianSequenceOverlay(phase:ahianPhase,countdown:ahianCountdown)),
  
  ]))));
  Widget top()=>const SizedBox(height:4);
@@ -327,3 +327,28 @@ class OrbitMark extends CustomPainter{
  @override bool shouldRepaint(covariant OrbitMark o)=>o.alt!=alt||o.phase!=phase;
 }
 class PointerShape extends CustomPainter{final bool alt;PointerShape(this.alt);@override void paint(Canvas c,Size s){final path=Path()..moveTo(2,1)..lineTo(2,27)..lineTo(9,21)..lineTo(14,33)..lineTo(19,30)..lineTo(14,18)..lineTo(25,18)..close();c.drawPath(path,Paint()..color=Colors.black..style=PaintingStyle.stroke..strokeWidth=3);c.drawPath(path,Paint()..color=(alt?lime:Colors.white)..style=PaintingStyle.fill);}@override bool shouldRepaint(covariant PointerShape o)=>o.alt!=alt;}
+
+
+/// Visual-only recovery sequence; it does not crash or reboot the host OS.
+class AhianSequenceOverlay extends StatelessWidget{
+ final int phase,countdown;
+ const AhianSequenceOverlay({super.key,required this.phase,required this.countdown});
+ @override Widget build(BuildContext context){
+  if(phase==0)return Material(color:const Color(0xFF050505),child:Stack(children:[
+   for(var i=0;i<7;i++)Positioned(left:(i*73.0)%math.max(1,MediaQuery.sizeOf(context).width-230),top:(i*47.0)%math.max(1,MediaQuery.sizeOf(context).height-100),child:Container(width:210,height:76,padding:const EdgeInsets.all(10),decoration:BoxDecoration(color:const Color(0xFF171717),border:Border.all(color:const Color(0xFFD71921))),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[const Row(children:[Icon(Icons.error_outline,color:Color(0xFFD71921),size:14),SizedBox(width:6),Text('SMTH SYSTEM ALERT',style:TextStyle(color:Colors.white,fontSize:9,fontWeight:FontWeight.bold))]),const Spacer(),Text(['desktop service stopped','window manager not responding','recovering user session','visual subsystem interrupted'][i%4],style:const TextStyle(color:Colors.white70,fontSize:9)),const Spacer(),const Text('CLOSE   DETAILS',style:TextStyle(color:Colors.white38,fontSize:8))]))),
+   const Positioned(left:20,bottom:18,child:Text('AHIAN / RECOVERY SIMULATION',style:TextStyle(color:Colors.white38,fontSize:9,letterSpacing:2)))
+  ]));
+  if(phase==1)return Material(color:const Color(0xFF0878D1),child:SafeArea(child:Padding(padding:const EdgeInsets.fromLTRB(48,36,48,28),child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+   const Spacer(),const Text(':(',style:TextStyle(color:Colors.white,fontSize:74,fontWeight:FontWeight.w300,height:1)),
+   const SizedBox(height:18),const Text('WE WANT TO MAKE YOUR LIFE MORE BEAUTIFUL.',style:TextStyle(color:Colors.white,fontSize:22,fontWeight:FontWeight.w600,letterSpacing:.4)),
+   const SizedBox(height:14),const Text('AHIAN IS PREPARING A BETTER DESKTOP EXPERIENCE.\\nYour files and apps are safe. This is only a visual transition.',style:TextStyle(color:Colors.white,fontSize:12,height:1.8)),
+   const Spacer(),Text('YOUR DESKTOP WILL BE READY IN '+countdown.toString()+' SECONDS',style:const TextStyle(color:Colors.white,fontSize:11,letterSpacing:1.5)),
+   const SizedBox(height:12),const Text('STOP CODE: BEAUTY_IN_PROGRESS',style:TextStyle(color:Colors.white70,fontSize:9,letterSpacing:1))
+  ]))));
+  return const Material(color:Color(0xFF080808),child:Center(child:Column(mainAxisSize:MainAxisSize.min,children:[
+   Icon(Icons.auto_awesome,size:34,color:Color(0xFFD71921)),SizedBox(height:18),
+   Text('A BETTER DESKTOP.',style:TextStyle(color:Colors.white,fontSize:24,fontWeight:FontWeight.w700,letterSpacing:2)),
+   SizedBox(height:8),Text('AHIAN IS READY  /  YOUR WORKSPACE IS SAFE',style:TextStyle(color:Colors.white60,fontSize:9,letterSpacing:1.4))
+  ])));
+ }
+}
